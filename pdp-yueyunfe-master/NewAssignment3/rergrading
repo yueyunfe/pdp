@@ -1,0 +1,15 @@
+1. Cleared all the maven issues.
+
+2. made the project to accept the command line
+
+3. clear the issue of missing event argument
+
+4. give message if input file does not exist. It was terminating the project silently when found an error.
+
+5. One question about the design part, it says:
+    "checkInput() is still complex - it would be easy to break it into small methods that check
+                                               different arguments."
+
+  My explanation: I do not deny it looks like a little long. But 1st, the method does what his job for checking
+  each input. 2nd, I did realize it might be a little long, so I broke it into sections and also gave comments to
+  explain what each section did. So I believe I handled it properly. Maybe not perfect, but I did handle the case

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CandyVisitor.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Assignment for class CS5010</a> &gt; <a href="index.source.html" class="el_package">edu.neu.ccs.cs5010.assignment4</a> &gt; <span class="el_source">CandyVisitor.java</span></div><h1>CandyVisitor.java</h1><pre class="source lang-java linenums">package edu.neu.ccs.cs5010.assignment4;
+
+import java.util.ArrayList;
+
+public class CandyVisitor implements Visitor {
+
+<span class="fc" id="L7">  private final String SUPER_SIZE = &quot;super&quot;;</span>
+<span class="fc" id="L8">  private final String KING_SIZE = &quot;king&quot;;</span>
+<span class="fc" id="L9">  private final String REGULAR_SIZE = &quot;regular&quot;;</span>
+<span class="fc" id="L10">  private final String FUN_SIZE = &quot;fun&quot;;</span>
+<span class="fc" id="L11">  private final String NOTAVAILABLE = &quot;N/A&quot;;</span>
+
+  private Duplex duplex;
+  private DetachedHouse detachedHouse;
+  private Mansion mansion;
+  private Townhome townhome;
+
+  /**
+   * Constructor to set household information ready
+   */
+<span class="fc" id="L21">  public CandyVisitor() {</span>
+<span class="fc" id="L22">    duplex = new Duplex();</span>
+<span class="fc" id="L23">    detachedHouse = new DetachedHouse();</span>
+<span class="fc" id="L24">    mansion = new Mansion();</span>
+<span class="fc" id="L25">    townhome = new Townhome();</span>
+<span class="fc" id="L26">  }</span>
+
+  /**
+   * For specific size, check if the household candy list has the desired candy
+   *
+   * @param candy the candy to search for
+   * @return size, candy, household
+   */
+  private String checkAvailability(Candy candy) {
+<span class="pc bpc" id="L35" title="6 of 18 branches missed.">    switch (candy.size) {</span>
+      case SUPER_SIZE:
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if (searchCandyName(duplex.getSuperCandy(), candy)) {</span>
+<span class="nc" id="L38">          return &quot;Super Size,&quot; + candy.getName() + &quot;,&quot; + duplex.getName();</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        } else if (searchCandyName(detachedHouse.getSuperCandy(), candy)) {</span>
+<span class="fc" id="L40">          return &quot;Super Size,&quot; + candy.getName() + &quot;,&quot; + detachedHouse.getName();</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        } else if (searchCandyName(mansion.getSuperCandy(), candy)) {</span>
+<span class="fc" id="L42">          return &quot;Super Size,&quot; + candy.getName() + &quot;,&quot; + mansion.getName();</span>
+        } else {
+<span class="nc" id="L44">          return NOTAVAILABLE;</span>
+        }
+      case KING_SIZE:
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (searchCandyName(duplex.getKingCandy(), candy)) {</span>
+<span class="fc" id="L48">          return &quot;King Size,&quot; + candy.getName() + &quot;,&quot; + duplex.getName();</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        } else if (searchCandyName(detachedHouse.getKingCandy(), candy)) {</span>
+<span class="nc" id="L50">          return &quot;King Size,&quot; + candy.getName() + &quot;,&quot; + detachedHouse.getName();</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        } else if (searchCandyName(mansion.getKingCandy(), candy)) {</span>
+<span class="nc" id="L52">          return &quot;King Size,&quot; + candy.getName() + &quot;,&quot; + mansion.getName();</span>
+        } else {
+<span class="fc" id="L54">          return NOTAVAILABLE;</span>
+        }
+      case FUN_SIZE:
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if (searchCandyName(duplex.getFunCandy(), candy)) {</span>
+<span class="nc" id="L58">          return &quot;Fun Size,&quot; + candy.getName() + &quot;,&quot; + duplex.getName();</span>
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">        } else if (searchCandyName(detachedHouse.getFunCandy(), candy)) {</span>
+<span class="nc" id="L60">          return &quot;Fun Size,&quot; + candy.getName() + &quot;,&quot; + detachedHouse.getName();</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        } else if (searchCandyName(mansion.getFunCandy(), candy)) {</span>
+<span class="fc" id="L62">          return &quot;Fun Size,&quot; + candy.getName() + &quot;,&quot; + mansion.getName();</span>
+        } else {
+<span class="nc" id="L64">          return NOTAVAILABLE;</span>
+        }
+      case REGULAR_SIZE:
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if (searchCandyName(townhome.getRegularCandy(), candy)) {</span>
+<span class="fc" id="L68">          return &quot;Regular Size,&quot; + candy.getName() + &quot;,&quot; + townhome.getName();</span>
+        } else {
+<span class="nc" id="L70">          return NOTAVAILABLE;</span>
+        }
+      default:
+<span class="nc" id="L73">        return null;</span>
+    }
+  }
+
+  /**
+   * Method to Search for the candy in the list
+   *
+   * @param list  the container
+   * @param candy the candy want
+   * @return true if found
+   */
+  public boolean searchCandyName(ArrayList list, Candy candy) {
+<span class="fc bfc" id="L85" title="All 2 branches covered.">    if (list.contains(candy.getName().toLowerCase())) {</span>
+<span class="fc" id="L86">      return true;</span>
+    }
+<span class="fc" id="L88">    return false;</span>
+  }
+
+  @Override
+  public String visit(Twix twix) {
+<span class="fc" id="L93">    return checkAvailability(twix);</span>
+  }
+
+  @Override
+  public String visit(Snickers snickers) {
+
+<span class="fc" id="L99">    return checkAvailability(snickers);</span>
+  }
+
+  @Override
+  public String visit(Mars mars) {
+<span class="fc" id="L104">    return checkAvailability(mars);</span>
+  }
+
+  @Override
+  public String visit(KitKat kitKat) {
+<span class="fc" id="L109">    return checkAvailability(kitKat);</span>
+  }
+
+  @Override
+  public String visit(Whoopers whoopers) {
+<span class="nc" id="L114">    return checkAvailability(whoopers);</span>
+  }
+
+  @Override
+  public String visit(MilkyWay milkyWay) {
+<span class="fc" id="L119">    return checkAvailability(milkyWay);</span>
+  }
+
+  @Override
+  public String visit(Toblerone toblerone) {
+<span class="fc" id="L124">    return checkAvailability(toblerone);</span>
+  }
+
+  @Override
+  public String visit(Crunch crunch) {
+<span class="nc" id="L129">    return checkAvailability(crunch);</span>
+  }
+
+  @Override
+  public String visit(BabyRuth babyRuth) {
+<span class="fc" id="L134">    return checkAvailability(babyRuth);</span>
+  }
+
+  @Override
+  public String visit(AlmondJoy almondJoy) {
+<span class="fc" id="L139">    return checkAvailability(almondJoy);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

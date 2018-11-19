@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>HalloweenNeighborhoodTraversal.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Assignment for class CS5010</a> &gt; <a href="index.source.html" class="el_package">edu.neu.ccs.cs5010.assignment4</a> &gt; <span class="el_source">HalloweenNeighborhoodTraversal.java</span></div><h1>HalloweenNeighborhoodTraversal.java</h1><pre class="source lang-java linenums">package edu.neu.ccs.cs5010.assignment4;
+
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+
+<span class="fc" id="L7">public class HalloweenNeighborhoodTraversal {</span>
+
+  private static final String NOTAVAILABLE = &quot;N/A&quot;;
+<span class="fc" id="L10">  private static String errorMessage = null;</span>
+<span class="fc" id="L11">  private static ArrayList&lt;String&gt; csvFileCollection = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L12">  private static ArrayList&lt;String&gt; idCollection = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L13">  private static ArrayList&lt;Child&gt; childrenList = new ArrayList&lt;&gt;();</span>
+  private static int numberOfFiles;
+  private static PrintWriter outPutStream;
+
+  public static void main(String[] args) {
+<span class="fc" id="L18">    System.out.println(&quot;Please give the command: number of files (space) file name (space).....&quot;);</span>
+
+    //check if the input command is valid and give appropriate message
+
+<span class="pc bpc" id="L22" title="1 of 2 branches missed.">    if (!processInput(args)) {</span>
+<span class="nc" id="L23">      System.out.println(errorMessage);</span>
+<span class="nc" id="L24">      return;</span>
+    }
+
+    //read the file information after input is valid
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">    if (!readFile()) {</span>
+<span class="nc" id="L29">      System.out.println(errorMessage);</span>
+<span class="nc" id="L30">      return;</span>
+    }
+
+
+<span class="fc" id="L34">    File file = creatFolder();</span>
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">    if (file != null) {</span>
+<span class="fc" id="L36">      outputResult(file);</span>
+    }
+
+<span class="fc" id="L39">  }</span>
+
+
+  /**
+   * Create each child when reading each csv file
+   * add the child object to the collection
+   *
+   * @return true if no error
+   */
+  public static boolean readFile() {
+<span class="fc bfc" id="L49" title="All 2 branches covered.">    for (int i = 0; i &lt; numberOfFiles; i++) {</span>
+<span class="fc" id="L50">      Child child = new Child(csvFileCollection.get(i), idCollection.get(i));</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">      if (!child.readCSV()) {</span>
+<span class="nc" id="L52">        errorMessage = &quot;Faile to read the information for child with id &quot; + idCollection.get(i);</span>
+<span class="nc" id="L53">        return false;</span>
+      }
+<span class="fc" id="L55">      childrenList.add(child);</span>
+    }
+<span class="fc" id="L57">    return true;</span>
+  }
+
+  //create the folder for output
+  public static File creatFolder() {
+<span class="fc" id="L62">    File file = new File(&quot;Candy&quot;);</span>
+<span class="pc bpc" id="L63" title="3 of 4 branches missed.">    if (!file.exists() &amp;&amp; !file.mkdir()) {</span>
+<span class="nc" id="L64">      return null;</span>
+    }
+<span class="fc" id="L66">    return file;</span>
+  }
+
+  /**
+   * Output the result into a csv file
+   *
+   * @param file destination file
+   */
+  public static void outputResult(File file) {
+    //loop through the child list
+<span class="fc bfc" id="L76" title="All 2 branches covered.">    for (int i = 0; i &lt; childrenList.size(); i++) {</span>
+<span class="fc" id="L77">      Child child = childrenList.get(i);</span>
+<span class="fc" id="L78">      CandyVisitor candyVisitor = new CandyVisitor();</span>
+<span class="fc" id="L79">      errorMessage = null;</span>
+
+<span class="fc" id="L81">      File childFile = new File(file.getPath() + &quot;/DreamTravesal&quot; + child.getChildId() + &quot;.csv&quot;);</span>
+      try {
+<span class="fc" id="L83">        outPutStream = new PrintWriter(new OutputStreamWriter(new FileOutputStream(childFile), Charset.defaultCharset()));</span>
+        //give the title
+<span class="fc" id="L85">        outPutStream.println(&quot;Candy type,Candy size,Household type&quot;);</span>
+<span class="nc" id="L86">      } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L87">        errorMessage = &quot;Fail to create file&quot;;</span>
+<span class="nc" id="L88">        continue;</span>
+<span class="fc" id="L89">      }</span>
+      //loop through the candy list for each child
+<span class="fc bfc" id="L91" title="All 2 branches covered.">      for (int j = 0; j &lt; child.getCandies().size(); j++) {</span>
+        //not have the object when reading the file
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">        if (child.getCandies().get(j) == null) {</span>
+<span class="nc" id="L94">          errorMessage = &quot;The desired candy is not available&quot;;</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">          if (!childFile.delete()) {</span>
+<span class="nc" id="L96">            throw new IllegalArgumentException(&quot;The original file was not able to be deleted&quot;);</span>
+          }
+          break;
+        }
+<span class="fc" id="L100">        String result = child.getCandies().get(j).accept(candyVisitor);</span>
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">        if (result == null) {</span>
+<span class="nc" id="L102">          errorMessage = &quot;The candy size is not an option&quot;;</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">          if (!childFile.delete()) {</span>
+<span class="nc" id="L104">            throw new IllegalArgumentException(&quot;The original file was not able to be deleted&quot;);</span>
+          }
+          break;
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        } else if (result.equals(NOTAVAILABLE)) {</span>
+<span class="fc" id="L108">          errorMessage = &quot;The size and type combination is not available&quot;;</span>
+<span class="fc" id="L109">          childFile.deleteOnExit();</span>
+<span class="fc" id="L110">          break;</span>
+        }
+<span class="fc" id="L112">        outPutStream.println(result);</span>
+      }
+<span class="fc" id="L114">      outPutStream.close();</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">      if (errorMessage != null) {</span>
+<span class="fc" id="L116">        System.out.println(&quot;Error: Child &quot; + child.getChildId() + &quot;, &quot; + errorMessage);</span>
+      }
+    }
+<span class="fc" id="L119">  }</span>
+
+  /**
+   * This method is used to check if the user input is correct
+   * Also store the file name into the list
+   *
+   * @param args user input command
+   * @return true for valid command
+   */
+  public static boolean processInput(String[] args) {
+
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">    if (args.length == 0) {</span>
+<span class="nc" id="L131">      return false;</span>
+    }
+
+<span class="fc" id="L134">    String input = &quot;&quot;;</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">    for (int i = 0; i &lt; args.length; i++) {</span>
+<span class="fc" id="L136">      input += args[i] + &quot; &quot;;</span>
+    }
+<span class="fc" id="L138">    input = input.trim();</span>
+    //split the command to get info
+<span class="fc" id="L140">    String[] parts = input.split(&quot;\\s+&quot;);</span>
+
+<span class="fc bfc" id="L142" title="All 2 branches covered.">    if (parts.length &lt;= 1) {</span>
+<span class="fc" id="L143">      errorMessage = &quot;At least two parameter command needed&quot;;</span>
+<span class="fc" id="L144">      return false;</span>
+    }
+    try {
+      //get the number of files
+<span class="fc" id="L148">      numberOfFiles = Integer.parseInt(parts[0].trim());</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">      if (numberOfFiles &lt;= 0) {</span>
+<span class="fc" id="L150">        errorMessage = &quot;Number of files can not be less than 1&quot;;</span>
+<span class="fc" id="L151">        return false;</span>
+      }
+<span class="nc" id="L153">    } catch (NumberFormatException e) {</span>
+<span class="nc" id="L154">      errorMessage = &quot;Invalid format for number of files&quot;;</span>
+<span class="nc" id="L155">      return false;</span>
+<span class="fc" id="L156">    }</span>
+    //get the name of the files
+<span class="fc" id="L158">    int countFileNumber = 0;</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">    for (int i = 1; i &lt; parts.length; i++) {</span>
+<span class="fc" id="L160">      String file = parts[i].trim();</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">      if (!file.contains(&quot;.&quot;)) {</span>
+<span class="fc" id="L162">        errorMessage = &quot;No dot for the file name&quot;;</span>
+<span class="fc" id="L163">        return false;</span>
+      }
+<span class="fc" id="L165">      String[] fileName = file.split(&quot;\\.&quot;);</span>
+<span class="fc" id="L166">      String prefix = fileName[0].trim();</span>
+<span class="fc" id="L167">      String suffix = fileName[1].trim();</span>
+<span class="pc bpc" id="L168" title="1 of 6 branches missed.">      if (prefix.length() == 0 || suffix.length() == 0 || !suffix.equals(&quot;csv&quot;)) {</span>
+<span class="fc" id="L169">        errorMessage = &quot;Invalid format for the csv file name&quot;;</span>
+<span class="fc" id="L170">        return false;</span>
+      }
+      //check if the file has the child number
+<span class="fc bfc" id="L173" title="All 2 branches covered.">      if (!prefix.contains(&quot;DreamCandy&quot;)) {</span>
+<span class="fc" id="L174">        errorMessage = &quot;Invalid name for the csv file&quot;;</span>
+<span class="fc" id="L175">        return false;</span>
+      }
+<span class="fc" id="L177">      String number = prefix.substring(prefix.indexOf(&quot;DreamCandy&quot;) + 10);</span>
+<span class="fc" id="L178">      idCollection.add(number);</span>
+<span class="fc" id="L179">      csvFileCollection.add(file);</span>
+<span class="fc" id="L180">      countFileNumber++;</span>
+    }
+<span class="fc bfc" id="L182" title="All 2 branches covered.">    if (numberOfFiles != countFileNumber) {</span>
+<span class="fc" id="L183">      errorMessage = &quot;Number of files does not match&quot;;</span>
+<span class="fc" id="L184">      return false;</span>
+    }
+<span class="fc" id="L186">    return true;</span>
+  }
+
+
+  //8 DreamCandy3.csv DreamCandy4.csv DreamCandy5.csv DreamCandy6.csv DreamCandy7.csv DreamCandy8.csv DreamCandy9.csv DreamCandy10.csv
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

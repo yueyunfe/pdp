@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Hospital.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Assignment for class CS5010</a> &gt; <a href="index.source.html" class="el_package">edu.neu.ccs.cs5010.assignment2</a> &gt; <span class="el_source">Hospital.java</span></div><h1>Hospital.java</h1><pre class="source lang-java linenums">package edu.neu.ccs.cs5010.assignment2;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Random;
+
+public class Hospital {
+
+
+<span class="fc" id="L12">  private final int EXAMLOWEST = 1;</span>
+<span class="fc" id="L13">  private final int AGEMAX = 140;               //maximum age</span>
+<span class="fc" id="L14">  private final int LEVELMAX = 10;               //maximum level of severe</span>
+<span class="fc" id="L15">  private final int EXAMMAX = 10;               //max minute for exam</span>
+<span class="fc" id="L16">  private final int HIGHESTTEMP = 110;</span>
+<span class="fc" id="L17">  private final double LOWESTTEMP = 94.0;</span>
+<span class="fc" id="L18">  private final double HIGHESTBLOODPRESSURE = 170.0;</span>
+<span class="fc" id="L19">  private final double LOWESTBLOODPRESSURE = 80.0;</span>
+<span class="fc" id="L20">  private final double MILLISECTOMIN = 1000 * 60;</span>
+<span class="fc" id="L21">  private final int HIGHRATINGLEVEL = 60;</span>
+<span class="fc" id="L22">  private final int LOWRATINGLEVEL = 30;</span>
+
+
+  private int room;
+<span class="fc" id="L26">  private int patientId = 0;</span>
+<span class="fc" id="L27">  private int roomId = 0;</span>
+
+
+  private MyPriorityQueue&lt;Room&gt; waitingRoom;
+  private MyPriorityQueue&lt;Patient&gt; patients;
+  private MyPriorityQueue&lt;Patient&gt; examed;
+  private MyPriorityQueue&lt;Room&gt; examRoom;
+
+
+<span class="fc" id="L36">  private int totalpatient = 0;   //number of patient</span>
+  private double highemergencytimeave;
+  private double lowemergencytimeave;
+<span class="fc" id="L39">  private int countHighEmergency = 0;</span>
+<span class="fc" id="L40">  private int countLowEmergency = 0;</span>
+<span class="fc" id="L41">  private double highEmergencyTime = 0;</span>
+<span class="fc" id="L42">  private double lowEmergencyTime = 0;</span>
+<span class="fc" id="L43">  private double time = 0;</span>
+  private int option;
+<span class="fc" id="L45">  private int assignNumber = 0;</span>
+
+<span class="fc" id="L47">  private ArrayList&lt;Patient&gt; waitingPatientList = new ArrayList();</span>
+<span class="fc" id="L48">  private ArrayList&lt;Patient&gt; departurePatientList = new ArrayList();</span>
+<span class="fc" id="L49">  private ArrayList&lt;Room&gt; inuseRoomList = new ArrayList();</span>
+<span class="fc" id="L50">  private ArrayList&lt;Room&gt; roomList = new ArrayList();</span>
+
+  /**
+   * constructor
+   *
+   * @param room   number of rooms
+   * @param option option 1 for random, 2 for preset
+   */
+<span class="fc" id="L58">  public Hospital(int room, int option) {</span>
+<span class="fc" id="L59">    this.room = room;</span>
+<span class="fc" id="L60">    waitingRoom = new MyPriorityQueue&lt;Room&gt;();</span>
+<span class="fc" id="L61">    patients = new MyPriorityQueue&lt;Patient&gt;();</span>
+<span class="fc" id="L62">    examRoom = new MyPriorityQueue&lt;Room&gt;();</span>
+<span class="fc" id="L63">    examed = new MyPriorityQueue&lt;Patient&gt;();</span>
+<span class="fc" id="L64">    this.option = option;</span>
+
+<span class="fc bfc" id="L66" title="All 2 branches covered.">    for (int i = 0; i &lt; room; i++) {</span>
+<span class="fc" id="L67">      Room aroom = new Room(0, roomId);</span>
+<span class="fc" id="L68">      roomId++;</span>
+<span class="fc" id="L69">      waitingRoom.add(aroom);</span>
+    }
+<span class="fc" id="L71">  }</span>
+
+  public MyPriorityQueue&lt;Room&gt; getWaitingRoom() {
+<span class="fc" id="L74">    return waitingRoom;</span>
+  }
+
+  /**
+   * This works as the nurse register patient and give the patient information
+   */
+  public void registerPatient() {
+
+<span class="fc" id="L82">    Random random = new Random();</span>
+<span class="fc" id="L83">    int age = random.nextInt(AGEMAX);</span>
+<span class="fc" id="L84">    String name = generateName(random);</span>
+<span class="fc" id="L85">    int level = random.nextInt(LEVELMAX) + 1;</span>
+<span class="fc" id="L86">    long duration = random.nextInt(EXAMMAX) + EXAMLOWEST;</span>
+<span class="fc" id="L87">    double temp = random.nextDouble() * (HIGHESTTEMP - LOWESTTEMP) + LOWESTTEMP;</span>
+<span class="fc" id="L88">    double bloodpressure = random.nextDouble() * (</span>
+            HIGHESTBLOODPRESSURE - LOWESTBLOODPRESSURE) + LOWESTBLOODPRESSURE;
+
+
+<span class="fc" id="L92">    Patient patient = new Patient(age, patientId, name, level);</span>
+<span class="fc" id="L93">    patient.setArrivaltime(LocalDateTime.now());</span>
+<span class="fc" id="L94">    patient.setBloodpressure(bloodpressure);</span>
+<span class="fc" id="L95">    patient.setTemperature(temp);</span>
+<span class="fc" id="L96">    patient.setDuration(duration * 60 * 1000);   // in millisecond</span>
+<span class="fc" id="L97">    patients.add(patient);</span>
+<span class="fc" id="L98">    patientId++;</span>
+<span class="fc" id="L99">    totalpatient++;</span>
+<span class="fc" id="L100">  }</span>
+
+
+  /**
+   * used to generate dummy name
+   */
+
+  public String generateName(Random random) {
+<span class="fc" id="L108">    String alphabet = &quot;abcdefghijklmnopqrstuvwxyz&quot;;</span>
+<span class="fc" id="L109">    int count = 2;</span>
+<span class="fc" id="L110">    String name = &quot;&quot;;</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">    while (count &gt;= 0) {</span>
+<span class="fc" id="L112">      int index = random.nextInt(26);</span>
+<span class="fc" id="L113">      name += alphabet.charAt(index);</span>
+<span class="fc" id="L114">      count--;</span>
+<span class="fc" id="L115">    }</span>
+<span class="fc" id="L116">    return name;</span>
+
+  }
+
+  /**
+   * Preset mode setting
+   *
+   * @param roomNumber number of rooms provided
+   */
+  public void presetMode(int roomNumber) {
+<span class="fc" id="L126">    int totalPatient = 150;</span>
+<span class="fc" id="L127">    int timeOfRotation = 5;</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">    for (int i = 0; i &lt; totalPatient; i++) {</span>
+<span class="fc" id="L129">      registerPatient();</span>
+    }
+    //preset for 5
+<span class="fc" id="L132">    int count = 0;</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">    for (int i = 1; i &lt;= timeOfRotation; i++) {</span>
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">      if (room * i &gt; 150) {</span>
+<span class="nc" id="L135">        break;</span>
+      }
+<span class="fc" id="L137">      assignPatient();</span>
+
+<span class="fc" id="L139">      int examroomSize = examRoom.size();</span>
+
+<span class="fc bfc" id="L141" title="All 2 branches covered.">      for (int j = 0; j &lt; examroomSize; j++) {</span>
+<span class="fc" id="L142">        Patient patient = examRoom.get(j).getPatient();</span>
+<span class="fc" id="L143">        patient.setExamed(true);</span>
+<span class="fc" id="L144">        patient.setDeparturetime(LocalDateTime.ofInstant(Instant.ofEpochMilli(examRoom.get(j)</span>
+<span class="fc" id="L145">                .getEndingTime()), ZoneId.systemDefault()));</span>
+<span class="fc" id="L146">        examed.add(patient);</span>
+<span class="fc" id="L147">        waitingRoom.add(examRoom.get(j));</span>
+<span class="fc" id="L148">        count++;</span>
+      }
+<span class="fc" id="L150">      examRoom.clear();</span>
+    }
+<span class="fc" id="L152">    assignNumber = count;</span>
+<span class="fc" id="L153">  }</span>
+
+  /**
+   * This assign the patient to the room
+   */
+  public boolean assignPatient() {
+<span class="pc bpc" id="L159" title="2 of 4 branches missed.">    if (waitingRoom.size() == 0 || patients.size() == 0) {</span>
+<span class="nc" id="L160">      return false; //no room provided</span>
+    }
+
+
+<span class="fc" id="L164">    int size = waitingRoom.size();</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">    for (int i = 0; i &lt; size; i++) {</span>
+<span class="fc" id="L166">      Room theroom = waitingRoom.peek();</span>
+<span class="fc" id="L167">      Patient thepatient = patients.peek();</span>
+<span class="pc bpc" id="L168" title="2 of 4 branches missed.">      if (thepatient == null || theroom == null) {</span>
+<span class="nc" id="L169">        break;</span>
+      }
+<span class="fc" id="L171">      theroom.addPatient(thepatient);</span>
+<span class="fc" id="L172">      patients.remove(thepatient);</span>
+<span class="fc" id="L173">      waitingRoom.remove(theroom);</span>
+<span class="fc" id="L174">      examRoom.add(theroom);</span>
+    }
+<span class="fc" id="L176">    return true;</span>
+  }
+
+  /**
+   * check if the current room has done the treatment
+   *
+   * @param room the current room
+   * @return true if it's done
+   */
+  public boolean doneExam(Room room) {
+
+<span class="fc" id="L187">    Patient patient = room.getPatient();</span>
+<span class="fc" id="L188">    patient.setExamed(true);</span>
+<span class="fc" id="L189">    patient.setDeparturetime(LocalDateTime.ofInstant(Instant.ofEpochMilli</span>
+<span class="fc" id="L190">            (room.getEndingTime()), ZoneId.systemDefault()));</span>
+<span class="fc" id="L191">    examed.add(patient);</span>
+<span class="pc bpc" id="L192" title="1 of 2 branches missed.">    if (examRoom.contains(room)) {</span>
+<span class="nc" id="L193">      examRoom.remove(room);</span>
+<span class="nc bnc" id="L194" title="All 2 branches missed.">      if (!waitingRoom.contains(room)) {</span>
+<span class="nc" id="L195">        waitingRoom.add(room);</span>
+<span class="nc" id="L196">        return true;</span>
+      }
+    }
+<span class="fc" id="L199">    return false;</span>
+  }
+
+  public MyPriorityQueue&lt;Room&gt; getExamRoom() {
+<span class="nc" id="L203">    return examRoom;</span>
+  }
+
+  public Room getLastInUseRoom() {
+<span class="nc" id="L207">    return getTail(examRoom);</span>
+  }
+
+  /**
+   * Calculate the average waiting time for all the patients
+   *
+   * @return the average waiting time
+   */
+  public double averageTime() {
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">    if (totalpatient == 0) {</span>
+<span class="nc" id="L217">      return 0;</span>
+    }
+
+    //check for the waiting patients
+<span class="pc bpc" id="L221" title="1 of 2 branches missed.">    if (patients.size() != 0) {</span>
+<span class="fc" id="L222">      int size = patients.size();</span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">      for (int i = 0; i &lt; size; i++) {</span>
+<span class="fc" id="L224">        Patient patient = patients.poll();</span>
+<span class="fc" id="L225">        waitingPatientList.add(patient);</span>
+
+<span class="fc" id="L227">        time += (patient.getWaiting()) / MILLISECTOMIN;</span>
+<span class="fc" id="L228">        calculateTimeForEmergencyPatient(patient);</span>
+      }
+    }
+
+    //check for the patients who is still in exam
+<span class="pc bpc" id="L233" title="1 of 2 branches missed.">    if (examRoom.size() != 0) {</span>
+<span class="nc" id="L234">      int size = examRoom.size();</span>
+<span class="nc bnc" id="L235" title="All 2 branches missed.">      for (int i = 0; i &lt; size; i++) {</span>
+<span class="nc" id="L236">        Room room = examRoom.poll();</span>
+<span class="nc" id="L237">        inuseRoomList.add(room);</span>
+<span class="nc" id="L238">        roomList.add(room);</span>
+<span class="nc" id="L239">        time += (room.getPatient().getWaiting()) / MILLISECTOMIN;</span>
+<span class="nc" id="L240">        calculateTimeForEmergencyPatient(room.getPatient());</span>
+      }
+    }
+    //check for the patients who have done the exam
+<span class="fc" id="L244">    int cnt = examed.size();</span>
+<span class="fc bfc" id="L245" title="All 2 branches covered.">    for (int i = 0; i &lt; cnt; i++) {</span>
+<span class="fc" id="L246">      Patient patient = examed.poll();</span>
+<span class="fc" id="L247">      departurePatientList.add(patient);</span>
+<span class="fc" id="L248">      time += (patient.getWaiting()) / MILLISECTOMIN;</span>
+<span class="fc" id="L249">      calculateTimeForEmergencyPatient(patient);</span>
+    }
+
+<span class="pc bpc" id="L252" title="1 of 2 branches missed.">    if (waitingRoom.size() != 0) {</span>
+<span class="fc" id="L253">      int size = waitingRoom.size();</span>
+<span class="fc bfc" id="L254" title="All 2 branches covered.">      for (int i = 0; i &lt; size; i++) {</span>
+<span class="fc" id="L255">        Room room = waitingRoom.poll();</span>
+<span class="fc" id="L256">        roomList.add(room);</span>
+      }
+    }
+
+<span class="fc" id="L260">    highemergencytimeave = highEmergencyTime / countHighEmergency;</span>
+<span class="fc" id="L261">    lowemergencytimeave = lowEmergencyTime / countLowEmergency;</span>
+<span class="fc" id="L262">    return time / totalpatient;</span>
+  }
+
+  /**
+   * Calculate the waiting time for low and high emergency patients
+   *
+   * @param patient patient obj
+   */
+  public void calculateTimeForEmergencyPatient(Patient patient) {
+
+<span class="fc bfc" id="L272" title="All 2 branches covered.">    if (patient.getRating() &gt;= HIGHRATINGLEVEL) {</span>
+<span class="fc" id="L273">      highEmergencyTime += (patient.getWaiting()) / MILLISECTOMIN;</span>
+<span class="fc" id="L274">      countHighEmergency++;</span>
+<span class="pc bpc" id="L275" title="1 of 4 branches missed.">    } else if (patient.getRating() &lt;= LOWRATINGLEVEL &amp;&amp; patient.getRating() &gt; 0) {</span>
+<span class="fc" id="L276">      lowEmergencyTime += (patient.getWaiting()) / MILLISECTOMIN;</span>
+<span class="fc" id="L277">      countLowEmergency++;</span>
+    }
+<span class="fc" id="L279">  }</span>
+
+  /**
+   * Used to calculate the average treatment time for patients who received the exam
+   *
+   * @return average treatment time
+   */
+  public double averageTreatmentTime() {
+<span class="pc bpc" id="L287" title="3 of 4 branches missed.">    if (departurePatientList.size() == 0 &amp;&amp; inuseRoomList.size() == 0) {</span>
+<span class="nc" id="L288">      return -1;</span>
+    }
+<span class="fc" id="L290">    long duration = 0;</span>
+<span class="fc bfc" id="L291" title="All 2 branches covered.">    for (int i = 0; i &lt; departurePatientList.size(); i++) {</span>
+<span class="fc" id="L292">      duration += departurePatientList.get(i).getDuration() / MILLISECTOMIN;</span>
+    }
+<span class="pc bpc" id="L294" title="1 of 2 branches missed.">    for (int i = 0; i &lt; inuseRoomList.size(); i++) {</span>
+<span class="nc" id="L295">      duration += inuseRoomList.get(i).getPatient().getDuration() / MILLISECTOMIN;</span>
+    }
+<span class="fc" id="L297">    return duration / (double) (departurePatientList.size() + inuseRoomList.size());</span>
+  }
+
+
+  public double getHighemergencytimeave() {
+<span class="fc" id="L302">    return highemergencytimeave;</span>
+  }
+
+  public double getLowemergencytimeave() {
+<span class="fc" id="L306">    return lowemergencytimeave;</span>
+  }
+
+  /**
+   * Find the room with specific id
+   *
+   * @param roomId id to looking for
+   * @return the room object
+   */
+  public Room getRoomById(int roomId) {
+<span class="pc bpc" id="L316" title="1 of 2 branches missed.">    for (int i = 0; i &lt; roomList.size(); i++) {</span>
+<span class="fc" id="L317">      Room room = roomList.get(i);</span>
+<span class="fc bfc" id="L318" title="All 2 branches covered.">      if (room.getRoomId() == roomId) {</span>
+<span class="fc" id="L319">        return room;</span>
+      }
+    }
+<span class="nc" id="L322">    return null;</span>
+  }
+
+  /**
+   * Looking for the last room object in the queue
+   *
+   * @param roomsInuse the queue to looking for
+   * @return the desired room object
+   */
+  public Room getTail(MyPriorityQueue&lt;Room&gt; roomsInuse) {
+<span class="fc" id="L332">    int size = roomsInuse.size();</span>
+<span class="fc" id="L333">    ArrayList&lt;Room&gt; roomArrayList = new ArrayList();</span>
+<span class="pc bpc" id="L334" title="1 of 2 branches missed.">    if (size &gt; 1) {</span>
+<span class="fc bfc" id="L335" title="All 2 branches covered.">      for (int i = 0; i &lt; size - 1; i++) {</span>
+<span class="fc" id="L336">        Room theroom = roomsInuse.poll();</span>
+<span class="fc" id="L337">        roomArrayList.add(theroom);</span>
+      }
+<span class="fc" id="L339">      Room neededroom = roomsInuse.peek();</span>
+<span class="fc bfc" id="L340" title="All 2 branches covered.">      for (int i = 0; i &lt; roomArrayList.size(); i++) {</span>
+<span class="fc" id="L341">        roomsInuse.add(roomArrayList.get(i));</span>
+      }
+<span class="fc" id="L343">      return neededroom;</span>
+<span class="nc bnc" id="L344" title="All 2 branches missed.">    } else if (size == 1) {</span>
+<span class="nc" id="L345">      return roomsInuse.peek();</span>
+    } else {
+<span class="nc" id="L347">      return null;</span>
+    }
+  }
+
+  /**
+   * Set all waiting patient time after 8 hours done
+   */
+  public void setPatientWaitingTime() {
+<span class="fc" id="L355">    long frequency = 1000 * 60; //1min</span>
+<span class="fc bfc" id="L356" title="All 2 branches covered.">    for (int i = 0; i &lt; patients.size(); i++) {</span>
+<span class="fc" id="L357">      Patient patient = patients.get(i);</span>
+<span class="pc bpc" id="L358" title="1 of 2 branches missed.">      if (patient != null) {</span>
+<span class="pc bpc" id="L359" title="1 of 2 branches missed.">        if (option == 1) {</span>
+<span class="nc" id="L360">          patient.setWaiting(System.currentTimeMillis() - patients.get(i).getArrivaltime()</span>
+<span class="nc" id="L361">                  .atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());</span>
+        } else {
+<span class="fc" id="L363">          patient.setWaiting(System.currentTimeMillis() - patients.get(i).getArrivaltime()</span>
+<span class="fc" id="L364">                  .atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() + frequency * i);</span>
+        }
+
+      }
+    }
+
+<span class="fc" id="L370">  }</span>
+
+
+  public int getAssignNumber() {
+<span class="fc" id="L374">    return assignNumber;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

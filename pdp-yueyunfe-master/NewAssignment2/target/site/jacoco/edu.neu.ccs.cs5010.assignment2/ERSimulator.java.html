@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ERSimulator.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Assignment for class CS5010</a> &gt; <a href="index.source.html" class="el_package">edu.neu.ccs.cs5010.assignment2</a> &gt; <span class="el_source">ERSimulator.java</span></div><h1>ERSimulator.java</h1><pre class="source lang-java linenums">package edu.neu.ccs.cs5010.assignment2;
+
+
+<span class="nc" id="L4">public class ERSimulator {</span>
+
+  private static final String MESSAGE_ROOM_NUMBER = &quot;How many rooms are in the hospital?&quot;;
+  private static final String MESSAGE_RANDOM_OR_PRESET = &quot;1.Random         2.Preset&quot;;
+  //frequency for patient coming in millisec
+  private static final long PATIENT_FREQUENCY = 3 * 60 * 1000;
+  //simulation time in millisecond
+  private static final long SIMULATION_TIME = 8 * 3600 * 1000;
+  //simulation time in millisecond
+  private static final long MILLITOHOURS = 1000 * 3600;
+
+<span class="fc" id="L15">  private static int countExaming = 0;         //count the number of treatment taken</span>
+<span class="fc" id="L16">  private static long totaltime = 0;</span>
+  private static long start;
+
+  private static Hospital hospital;
+
+  public static void main(String[] arg) {
+    int roomtotal;
+    int option;
+
+<span class="fc" id="L25">    System.out.println(MESSAGE_ROOM_NUMBER);</span>
+<span class="fc" id="L26">    System.out.println(MESSAGE_RANDOM_OR_PRESET);</span>
+
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">    if (arg.length != 2) {</span>
+<span class="nc" id="L29">      throw new IllegalArgumentException(&quot;Need two parameters&quot;);</span>
+    }
+<span class="fc" id="L31">    roomtotal = toInteger(arg[0]);</span>
+<span class="fc" id="L32">    option = toInteger(arg[1]);</span>
+<span class="pc bpc" id="L33" title="3 of 6 branches missed.">    if (roomtotal &lt; 0 || option &gt; 2 || option &lt; 1) {</span>
+<span class="nc" id="L34">      throw new IllegalArgumentException(&quot;illegal input&quot;);</span>
+    }
+<span class="fc" id="L36">    hospital = new Hospital(roomtotal, option);</span>
+
+    //preset mode for option 2, if goes with option , it will run 8 hours simulation
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">    if (option == 1) {</span>
+<span class="nc" id="L40">      generateSimulator();</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">      if (hospital.getLastInUseRoom() == null) {</span>
+<span class="nc" id="L42">        totaltime = (SIMULATION_TIME) / MILLITOHOURS;</span>
+      } else {
+<span class="nc" id="L44">        totaltime = (hospital.getLastInUseRoom().getEndingTime() - start) / MILLITOHOURS;</span>
+      }
+    } else {
+<span class="fc" id="L47">      hospital.presetMode(roomtotal);</span>
+<span class="fc" id="L48">      totaltime = SIMULATION_TIME / MILLITOHOURS;</span>
+<span class="fc" id="L49">      countExaming = hospital.getAssignNumber();</span>
+    }
+
+<span class="fc" id="L52">    System.out.println(&quot;There are &quot; + roomtotal + &quot; rooms in the system&quot;);</span>
+
+
+    //total time
+
+    //calculate and set the waiting time for those whos still waiting
+<span class="fc" id="L58">    hospital.setPatientWaitingTime();</span>
+
+<span class="fc" id="L60">    System.out.println(&quot;The simulation runs &quot; + totaltime + &quot; hours&quot;);</span>
+
+<span class="fc" id="L62">    System.out.println(&quot;The hospital has &quot; + countExaming + &quot; people done for treatment&quot;);</span>
+    //System.out.println(&quot;There are &quot;+count_examed+&quot; people finished the treatment&quot;);
+
+    //average
+<span class="fc" id="L66">    System.out.println(String.format(&quot;The overall average for waiting is &quot;</span>
+<span class="fc" id="L67">            + &quot;%.3f minutes&quot;, hospital.averageTime()));</span>
+<span class="fc" id="L68">    System.out.println(String.format(&quot;The average of waiting for high emergency is %.3f &quot;</span>
+<span class="fc" id="L69">            + &quot;minutes&quot;, hospital.getHighemergencytimeave()));</span>
+<span class="fc" id="L70">    System.out.println(String.format(&quot;The average of waiting for low emergency &quot;</span>
+<span class="fc" id="L71">            + &quot;is %.3f minutes&quot;, hospital.getLowemergencytimeave()));</span>
+
+    //treatment
+<span class="fc" id="L74">    System.out.println(String.format(&quot;The average treatment duration &quot;</span>
+<span class="fc" id="L75">            + &quot;is %.3f minutes&quot;, hospital.averageTreatmentTime()));</span>
+
+
+<span class="fc bfc" id="L78" title="All 2 branches covered.">    for (int i = 0; i &lt; roomtotal; i++) {</span>
+<span class="fc" id="L79">      Room room = hospital.getRoomById(i);</span>
+<span class="fc" id="L80">      System.out.println(&quot;For room &quot; + i + &quot;,&quot; + room.getNumberPatient() + &quot; people were &quot;</span>
+              + &quot;treated and the busy percentage is &quot;
+<span class="fc" id="L82">              + String.format(&quot;%.1f%%&quot;, room.getPercentageBusy()));</span>
+    }
+<span class="fc" id="L84">  }</span>
+
+
+  /**
+   * Simulate the event that patients coming instantly as the defined frequency
+   * Only be used when running the random simulation
+   */
+  public static void generateSimulator() {
+<span class="nc" id="L92">    start = System.currentTimeMillis();</span>
+<span class="nc" id="L93">    long end = start + SIMULATION_TIME;</span>
+<span class="nc" id="L94">    long counting = start;</span>
+<span class="nc" id="L95">    long expected = start;</span>
+
+<span class="nc bnc" id="L97" title="All 2 branches missed.">    while (counting &lt;= end) {</span>
+      //register patient at this frequency
+<span class="nc bnc" id="L99" title="All 2 branches missed.">      if (expected == counting) {</span>
+<span class="nc" id="L100">        hospital.registerPatient();</span>
+<span class="nc" id="L101">        expected += PATIENT_FREQUENCY;</span>
+      }
+
+      //there is both room and patient
+<span class="nc bnc" id="L105" title="All 2 branches missed.">      if (hospital.assignPatient()) {</span>
+<span class="nc" id="L106">        countExaming++;</span>
+      }
+<span class="nc" id="L108">      counting = System.currentTimeMillis();</span>
+    }
+<span class="nc" id="L110">  }</span>
+
+  /**
+   * Check if a string can be convert to an integer.
+   *
+   * @param input string to convert
+   * @return integer converted
+   */
+  public static int toInteger(String input) {
+    try {
+<span class="fc" id="L120">      int number = Integer.parseInt(input);</span>
+<span class="fc" id="L121">      return number;</span>
+<span class="nc" id="L122">    } catch (NumberFormatException e) {</span>
+<span class="nc" id="L123">      return -1;</span>
+    }
+  }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

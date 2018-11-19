@@ -1,0 +1,2 @@
+1.cleared the maven
+2.support the command input

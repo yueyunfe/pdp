@@ -1,0 +1,9 @@
+1. I added a generic comparison method for MyPriorityQueue, I was originally be able to compare the Room object and Patient object.
+
+2. Cleared all the maven report issues.
+
+3. In IPriorityQueue, I added a remove() method. I was originally have the same method as remove(). The name was poll(), which functions
+
+    as totally the same as remove(), so I just pasted all the code from poll().
+
+4. Updated the QueueTest and StackTest

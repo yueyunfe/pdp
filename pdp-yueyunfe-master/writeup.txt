@@ -1,0 +1,44 @@
+For the problem 4, in order to get the random course.
+
+1st, I need to generate a random number.
+
+2nd. Get the random course name from the array by using the generated number as the index
+
+3rd. print out the random course name
+
+
+
+
+For the problem 5,
+
+1st, I modified the case that n<0 instead of n<=0
+
+2nd. modified the base case which n=0 and n=1
+
+3rd. the formula for fibonacci should be adding them together instead of minus
+
+
+
+For the problem 6,
+
+I designed my program asking user for an input to reverse. The valid input is only for
+
+integer(positive or negative). If the user type a wrong format, the program will continually
+
+asking user for a correct input.
+
+I did a few tests which are all past. The tests include valid positive or negative numbers, invalid
+
+double number, invalid string, invalid space and overflow.
+
+
+For the problem 7,
+
+Vehicle.java  Add a default constructor to throw an exception. Add exception for wrong format. Modified the return
+              value. Tested default constructor which has no input, tested invalid direction and velocity
+
+Highway.java  Filled every method and tested all and passed them all.
+
+ScenicRoad.jave  Used inheritance from highway, override the add method. set the max speed to 5.0, had a formula for
+                 max number of cars. Tested if speed changes when exceed the capacity.
+

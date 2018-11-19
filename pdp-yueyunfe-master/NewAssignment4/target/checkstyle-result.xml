@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="6.11.2">
+<file name="C:\Users\ninja\Documents\GitHub\pdp-yueyunfe\NewAssignment4\src\main\java\edu\neu\ccs\cs5010\assignment4\AlmondJoy.java">
+</file>
+<file name="C:\Users\ninja\Documents\GitHub\pdp-yueyunfe\NewAssignment4\src\main\java\edu\neu\ccs\cs5010\assignment4\BabyRuth.java">
+</file>
+<file name="C:\Users\ninja\Documents\GitHub\pdp-yueyunfe\NewAssignment4\src\main\java\edu\neu\ccs\cs5010\assignment4\Candy.java">
+<error line="5" severity="warning" message="&apos;,&apos; should be separated from previous statement." source="com.puppycrawl.tools.checkstyle.checks.whitespace.EmptyLineSeparatorCheck"/>
+<error line="5" severity="warning" message="Abbreviation in name must contain no more than &apos;1&apos; capital letters." source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
+<error line="5" severity="warning" message="Line is longer than 100 characters (found 120)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="5" column="3" severity="warning" message="Each variable declaration must be in its own statement." source="com.puppycrawl.tools.checkstyle.checks.coding.MultipleVariableDeclarationsCheck"/>
+<error line="5" column="26" severity="warning" message="Member name &apos;TWIX&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="5" column="41" severity="warning" message="Member name &apos;SNICKERS&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="5" column="64" severity="warning" message="Member name &apos;MARS&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="5" column="79" severity="warning" message="Member name &apos;KITKAT&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="5" column="99" severity="warning" message="Member name &apos;WHOOPERS&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="6" severity="warning" message="&apos;,&apos; should be separated from previous statement." source="com.puppycrawl.tools.checkstyle.checks.whitespace.EmptyLineSeparatorCheck"/>
+<error line="6" severity="warning" message="Abbreviation in name must contain no more than &apos;1&apos; capital letters." source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
+<error line="6" severity="warning" message="Line is longer than 100 characters (found 142)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="6" column="3" severity="warning" message="Each variable declaration must be in its own statement." source="com.puppycrawl.tools.checkstyle.checks.coding.MultipleVariableDeclarationsCheck"/>
+<error line="6" column="26" severity="warning" message="Member name &apos;MILKYWAY&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="6" column="50" severity="warning" message="Member name &apos;TOBLERONE&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="6" column="75" severity="warning" message="Member name &apos;CRUNCH&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="6" column="94" severity="warning" message="Member name &apos;BABYRUTH&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="6" column="118" severity="warning" message="Member name &apos;ALMONDJOY&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="24" severity="warning" message="First sentence of Javadoc is incomplete (period is missing) or not present." source="com.puppycrawl.tools.checkstyle.checks.javadoc.SummaryJavadocCheck"/>
+<error line="27" severity="warning" message="At-clause should have a non-empty description." source="com.puppycrawl.tools.checkstyle.checks.javadoc.NonEmptyAtclauseDescriptionCheck"/>
+<error line="28" severity="warning" message="At-clause should have a non-empty description." source="com.puppycrawl.tools.checkstyle.checks.javadoc.NonEmptyAtclauseDescriptionCheck"/>
+</file>
+<file name="C:\Users\ninja\Documents\GitHub\pdp-yueyunfe\NewAssignment4\src\main\java\edu\neu\ccs\cs5010\assignment4\CandyVisitor.java">
+<error line="7" severity="warning" message="Abbreviation in name must contain no more than &apos;1&apos; capital letters." source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
+<error line="7" column="24" severity="warning" message="Member name &apos;SUPER_SIZE&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="8" severity="warning" message="Abbreviation in name must contain no more than &apos;1&apos; capital letters." source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
+<error line="8" column="24" severity="warning" message="Member name &apos;KING_SIZE&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="9" severity="warning" message="Abbreviation in name must contain no more than &apos;1&apos; capital letters." source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
+<error line="9" column="24" severity="warning" message="Member name &apos;REGULAR_SIZE&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="10" severity="warning" message="Abbreviation in name must contain no more than &apos;1&apos; capital letters." source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
+<error line="10" column="24" severity="warning" message="Member name &apos;FUN_SIZE&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="11" severity="warning" message="Abbreviation in name must contain no more than &apos;1&apos; capital letters." source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
+<error line="11" column="24" severity="warning" message="Member name &apos;NOTAVAILABLE&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="18" severity="warning" message="First sentence of Javadoc is incomplete (period is missing) or not present." source="com.puppycrawl.tools.checkstyle.checks.javadoc.SummaryJavadocCheck"/>
+<error line="28" severity="warning" message="First sentence of Javadoc is incomplete (period is missing) or not present." source="com.puppycrawl.tools.checkstyle.checks.javadoc.SummaryJavadocCheck"/>
+<error line="77" severity="warning" message="First sentence of Javadoc is incomplete (period is missing) or not present." source="com.puppycrawl.tools.checkstyle.checks.javadoc.SummaryJavadocCheck"/>
+</file>
+<file name="C:\Users\ninja\Documents\GitHub\pdp-yueyunfe\NewAssignment4\src\main\java\edu\neu\ccs\cs5010\assignment4\Child.java">
+<error line="13" severity="warning" message="&apos;,&apos; should be separated from previous statement." source="com.puppycrawl.tools.checkstyle.checks.whitespace.EmptyLineSeparatorCheck"/>
+<error line="13" severity="warning" message="Abbreviation in name must contain no more than &apos;1&apos; capital letters." source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
+<error line="13" severity="warning" message="Line is longer than 100 characters (found 118)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="13" column="3" severity="warning" message="Each variable declaration must be in its own statement." source="com.puppycrawl.tools.checkstyle.checks.coding.MultipleVariableDeclarationsCheck"/>
+<error line="13" column="24" severity="warning" message="Member name &apos;TWIX&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="13" column="39" severity="warning" message="Member name &apos;SNICKERS&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="13" column="62" severity="warning" message="Member name &apos;MARS&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="13" column="77" severity="warning" message="Member name &apos;KITKAT&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="13" column="97" severity="warning" message="Member name &apos;WHOOPERS&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="14" severity="warning" message="&apos;,&apos; should be separated from previous statement." source="com.puppycrawl.tools.checkstyle.checks.whitespace.EmptyLineSeparatorCheck"/>
+<error line="14" severity="warning" message="Abbreviation in name must contain no more than &apos;1&apos; capital letters." source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
+<error line="14" severity="warning" message="Line is longer than 100 characters (found 140)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="14" column="3" severity="warning" message="Each variable declaration must be in its own statement." source="com.puppycrawl.tools.checkstyle.checks.coding.MultipleVariableDeclarationsCheck"/>
+<error line="14" column="24" severity="warning" message="Member name &apos;MILKYWAY&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="14" column="48" severity="warning" message="Member name &apos;TOBLERONE&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="14" column="73" severity="warning" message="Member name &apos;CRUNCH&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="14" column="92" severity="warning" message="Member name &apos;BABYRUTH&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="14" column="116" severity="warning" message="Member name &apos;ALMONDJOY&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="32" severity="warning" message="First sentence of Javadoc is incomplete (period is missing) or not present." source="com.puppycrawl.tools.checkstyle.checks.javadoc.SummaryJavadocCheck"/>
+<error line="38" severity="warning" message="Abbreviation in name must contain no more than &apos;1&apos; capital letters." source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
+<error line="72" severity="warning" message="First sentence of Javadoc is incomplete (period is missing) or not present." source="com.puppycrawl.tools.checkstyle.checks.javadoc.SummaryJavadocCheck"/>
+<error line="96" severity="warning" message="First sentence of Javadoc is incomplete (period is missing) or not present." source="com.puppycrawl.tools.checkstyle.checks.javadoc.SummaryJavadocCheck"/>
+</file>
+<file name="C:\Users\ninja\Documents\GitHub\pdp-yueyunfe\NewAssignment4\src\main\java\edu\neu\ccs\cs5010\assignment4\Crunch.java">
+</file>
+<file name="C:\Users\ninja\Documents\GitHub\pdp-yueyunfe\NewAssignment4\src\main\java\edu\neu\ccs\cs5010\assignment4\DetachedHouse.java">
+<error line="4" column="3" severity="warning" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+</file>
+<file name="C:\Users\ninja\Documents\GitHub\pdp-yueyunfe\NewAssignment4\src\main\java\edu\neu\ccs\cs5010\assignment4\Duplex.java">
+<error line="5" column="3" severity="warning" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+</file>
+<file name="C:\Users\ninja\Documents\GitHub\pdp-yueyunfe\NewAssignment4\src\main\java\edu\neu\ccs\cs5010\assignment4\HalloweenNeighborhoodTraversal.java">
+<error line="3" severity="warning" message="Using the &apos;.*&apos; form of import should be avoided - java.io.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="17" column="3" severity="warning" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="42" severity="warning" message="First sentence of Javadoc is incomplete (period is missing) or not present." source="com.puppycrawl.tools.checkstyle.checks.javadoc.SummaryJavadocCheck"/>
+<error line="61" column="3" severity="warning" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="69" severity="warning" message="First sentence of Javadoc is incomplete (period is missing) or not present." source="com.puppycrawl.tools.checkstyle.checks.javadoc.SummaryJavadocCheck"/>
+<error line="83" severity="warning" message="Line is longer than 100 characters (found 122)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="121" severity="warning" message="First sentence of Javadoc is incomplete (period is missing) or not present." source="com.puppycrawl.tools.checkstyle.checks.javadoc.SummaryJavadocCheck"/>
+<error line="190" severity="warning" message="Line is longer than 100 characters (found 134)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+</file>
+<file name="C:\Users\ninja\Documents\GitHub\pdp-yueyunfe\NewAssignment4\src\main\java\edu\neu\ccs\cs5010\assignment4\Household.java">
+<error line="6" severity="warning" message="&apos;,&apos; should be separated from previous statement." source="com.puppycrawl.tools.checkstyle.checks.whitespace.EmptyLineSeparatorCheck"/>
+<error line="6" severity="warning" message="Abbreviation in name must contain no more than &apos;1&apos; capital letters." source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
+<error line="6" severity="warning" message="Line is longer than 100 characters (found 120)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="6" column="3" severity="warning" message="Each variable declaration must be in its own statement." source="com.puppycrawl.tools.checkstyle.checks.coding.MultipleVariableDeclarationsCheck"/>
+<error line="6" column="26" severity="warning" message="Member name &apos;TWIX&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="6" column="41" severity="warning" message="Member name &apos;SNICKERS&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="6" column="64" severity="warning" message="Member name &apos;MARS&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="6" column="79" severity="warning" message="Member name &apos;KITKAT&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="6" column="99" severity="warning" message="Member name &apos;WHOOPERS&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="7" severity="warning" message="&apos;,&apos; should be separated from previous statement." source="com.puppycrawl.tools.checkstyle.checks.whitespace.EmptyLineSeparatorCheck"/>
+<error line="7" severity="warning" message="Abbreviation in name must contain no more than &apos;1&apos; capital letters." source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
+<error line="7" severity="warning" message="Line is longer than 100 characters (found 142)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="7" column="3" severity="warning" message="Each variable declaration must be in its own statement." source="com.puppycrawl.tools.checkstyle.checks.coding.MultipleVariableDeclarationsCheck"/>
+<error line="7" column="26" severity="warning" message="Member name &apos;MILKYWAY&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="7" column="50" severity="warning" message="Member name &apos;TOBLERONE&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="7" column="75" severity="warning" message="Member name &apos;CRUNCH&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="7" column="94" severity="warning" message="Member name &apos;BABYRUTH&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="7" column="118" severity="warning" message="Member name &apos;ALMONDJOY&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+</file>
+<file name="C:\Users\ninja\Documents\GitHub\pdp-yueyunfe\NewAssignment4\src\main\java\edu\neu\ccs\cs5010\assignment4\KitKat.java">
+</file>
+<file name="C:\Users\ninja\Documents\GitHub\pdp-yueyunfe\NewAssignment4\src\main\java\edu\neu\ccs\cs5010\assignment4\Mansion.java">
+<error line="5" column="3" severity="warning" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+</file>
+<file name="C:\Users\ninja\Documents\GitHub\pdp-yueyunfe\NewAssignment4\src\main\java\edu\neu\ccs\cs5010\assignment4\Mars.java">
+</file>
+<file name="C:\Users\ninja\Documents\GitHub\pdp-yueyunfe\NewAssignment4\src\main\java\edu\neu\ccs\cs5010\assignment4\MilkyWay.java">
+</file>
+<file name="C:\Users\ninja\Documents\GitHub\pdp-yueyunfe\NewAssignment4\src\main\java\edu\neu\ccs\cs5010\assignment4\Snickers.java">
+</file>
+<file name="C:\Users\ninja\Documents\GitHub\pdp-yueyunfe\NewAssignment4\src\main\java\edu\neu\ccs\cs5010\assignment4\Toblerone.java">
+</file>
+<file name="C:\Users\ninja\Documents\GitHub\pdp-yueyunfe\NewAssignment4\src\main\java\edu\neu\ccs\cs5010\assignment4\Townhome.java">
+<error line="5" column="3" severity="warning" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+</file>
+<file name="C:\Users\ninja\Documents\GitHub\pdp-yueyunfe\NewAssignment4\src\main\java\edu\neu\ccs\cs5010\assignment4\Twix.java">
+</file>
+<file name="C:\Users\ninja\Documents\GitHub\pdp-yueyunfe\NewAssignment4\src\main\java\edu\neu\ccs\cs5010\assignment4\Visitable.java">
+</file>
+<file name="C:\Users\ninja\Documents\GitHub\pdp-yueyunfe\NewAssignment4\src\main\java\edu\neu\ccs\cs5010\assignment4\Visitor.java">
+</file>
+<file name="C:\Users\ninja\Documents\GitHub\pdp-yueyunfe\NewAssignment4\src\main\java\edu\neu\ccs\cs5010\assignment4\Whoopers.java">
+</file>
+</checkstyle>

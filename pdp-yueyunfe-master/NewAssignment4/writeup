@@ -1,0 +1,20 @@
+The main class HalloweenNeighborhoodTraversal was used to check the user input and output the result
+into a csv file
+
+The child class serves as a child who contains the information like candies that he/she desired to
+
+The candy class is the super class for all kinds of candies
+
+The Household class is the super class for all kinds of household
+
+The programs used visitor design pattern to search for the desired candy.
+
+CandyVisitor class is the one to search for the result when a candy object need to visit.
+
+I handled the error by giving the error message. Because if we have 2 children and the 1st child
+
+input wrong, we do not want to stop right now, we still need to process the 2nd child. So I record
+
+how many child meet error when trying to search. Also give error message to remind the child with this id
+
+meet an error when searching.

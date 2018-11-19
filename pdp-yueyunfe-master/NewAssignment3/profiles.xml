@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profilesXml xmlns="http://maven.apache.org/PROFILES/1.0.0"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://maven.apache.org/PROFILES/1.0.0 http://maven.apache.org/xsd/profiles-1.0.0.xsd">
+    <profiles>
+        <profile>
+            <id>myprofile</id>
+            <repositories>
+                <repository>
+                    <id>cs5010-repo</id>
+                    <name>your custom repo</name>
+                    <url>https://raw.github.com/divya025/cs5010/mvn-repo</url>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+
+    <activeProfiles>
+        <activeProfile>myprofile</activeProfile>
+    </activeProfiles>
+</profilesXml>

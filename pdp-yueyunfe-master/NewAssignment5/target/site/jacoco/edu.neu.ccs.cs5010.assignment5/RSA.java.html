@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>RSA.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Assignment for class CS5010</a> &gt; <a href="index.source.html" class="el_package">edu.neu.ccs.cs5010.assignment5</a> &gt; <span class="el_source">RSA.java</span></div><h1>RSA.java</h1><pre class="source lang-java linenums">package edu.neu.ccs.cs5010.assignment5;
+
+import java.math.BigInteger;
+import java.security.SecureRandom;
+
+
+<span class="fc" id="L7">public class RSA {</span>
+
+  private BigInteger keySecond; //n, which is equals p*q, where p and q are two random prime number
+  private BigInteger privateKey;
+  private BigInteger publicKey;
+  private BigInteger euler;
+<span class="fc" id="L13">  private boolean withdraw = false;</span>
+  private int money;
+<span class="fc" id="L15">  private static SecureRandom secureRandom = new SecureRandom();</span>
+<span class="fc" id="L16">  private final int MAXWITHDRAW = 3000;</span>
+<span class="fc" id="L17">  private final int MAXDEPOSIT = 2000;</span>
+  private BigInteger p1BigInteger, p2BigInteger, q1BigInteger, q2BigInteger;
+<span class="fc" id="L19">  private int bitSize = 256;</span>
+
+
+  /**
+   * Encrypt the message
+   *
+   * @param message
+   * @param keyPrivate
+   * @param secondKey
+   * @return
+   */
+  public BigInteger encrypt(int message, BigInteger keyPrivate, BigInteger secondKey) {
+<span class="fc" id="L31">    int lastDigit = message % 10;</span>
+<span class="fc" id="L32">    String number = String.valueOf(message);</span>
+<span class="fc" id="L33">    String restNumber = number.substring(0, number.length() - 1);</span>
+<span class="fc" id="L34">    money = Integer.parseInt(restNumber);</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">    if (lastDigit &gt;= 5) {</span>
+      //withdraw
+<span class="fc" id="L37">      withdraw = true;</span>
+      //over the limit for withdraw
+<span class="pc bpc" id="L39" title="1 of 4 branches missed.">      if (money &lt;= 0 || money &gt; MAXWITHDRAW) {</span>
+<span class="fc" id="L40">        return BigInteger.ZERO;</span>
+      }
+    } else {
+      //over the limit for deposit
+<span class="fc" id="L44">      withdraw = false;</span>
+<span class="pc bpc" id="L45" title="1 of 4 branches missed.">      if (money &lt;= 0 || money &gt; MAXDEPOSIT) {</span>
+<span class="fc" id="L46">        return BigInteger.ZERO;</span>
+      }
+
+    }
+
+<span class="fc" id="L51">    return BigInteger.valueOf(message).modPow(keyPrivate, secondKey);</span>
+  }
+
+  //Claculate the decryption number
+  public BigInteger decrypt(BigInteger encryptionNumber, BigInteger keyPublic, BigInteger secondKey) {
+
+<span class="fc" id="L57">    return encryptionNumber.modPow(keyPublic, secondKey);</span>
+  }
+
+  public boolean isWithdraw() {
+<span class="fc" id="L61">    return withdraw;</span>
+  }
+
+  public int getMoney() {
+<span class="fc" id="L65">    return money;</span>
+  }
+
+  public BigInteger getKeySecond() {
+<span class="fc" id="L69">    return keySecond;</span>
+  }
+
+  public BigInteger getprivateKey() {
+<span class="fc" id="L73">    return privateKey;</span>
+  }
+
+  public BigInteger getpublicKey() {
+<span class="fc" id="L77">    return publicKey;</span>
+  }
+
+  /**
+   * Calculate the private and public key
+   */
+  public void calculateKey() {
+
+    //generate 2 different prime
+<span class="fc" id="L86">    p1BigInteger = generatePrime();</span>
+<span class="fc" id="L87">    p2BigInteger = generatePrime();</span>
+
+
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">    while (p1BigInteger.equals(p2BigInteger)) {</span>
+<span class="nc" id="L91">      p2BigInteger = generatePrime();</span>
+    }
+
+
+<span class="fc" id="L95">    keySecond = p1BigInteger.multiply(p2BigInteger); //n</span>
+<span class="fc" id="L96">    euler = p1BigInteger.subtract(BigInteger.ONE).multiply(p2BigInteger.subtract(BigInteger.ONE));</span>
+
+    //find private key
+<span class="fc" id="L99">    privateKey = BigInteger.probablePrime(bitSize - 1, secureRandom); //e</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">    while (!privateKey.isProbablePrime(1)) {</span>
+<span class="nc" id="L101">      privateKey = BigInteger.probablePrime(bitSize - 1, secureRandom);</span>
+    }
+
+<span class="fc" id="L104">    BigInteger gcd = gcd(privateKey, euler);</span>
+
+<span class="fc" id="L106">    q1BigInteger = q1BigInteger.multiply(BigInteger.ONE.divide(gcd));</span>
+<span class="fc" id="L107">    publicKey = q1BigInteger.mod(euler.abs());</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">    if (q1BigInteger.mod(euler.abs()).compareTo(BigInteger.ZERO) &lt; 0) {</span>
+<span class="nc" id="L109">      publicKey = publicKey.add(euler.abs());</span>
+    }
+
+<span class="fc" id="L112">  }</span>
+
+  /**
+   * Generate the prime number
+   *
+   * @return prime number
+   */
+  private BigInteger generatePrime() {
+    BigInteger bigInteger;
+<span class="fc" id="L121">    bigInteger = BigInteger.probablePrime(bitSize, secureRandom);</span>
+<span class="pc bpc" id="L122" title="1 of 2 branches missed.">    while ((!bigInteger.isProbablePrime(1))) {</span>
+<span class="nc" id="L123">      bigInteger = BigInteger.probablePrime(bitSize, secureRandom);</span>
+
+    }
+<span class="fc" id="L126">    return bigInteger;</span>
+  }
+
+
+  /**
+   * Calculate the gcd
+   *
+   * @param bigInteger1
+   * @param bigInteger2
+   * @return gcd
+   */
+  private BigInteger gcd(BigInteger bigInteger1, BigInteger bigInteger2) {
+<span class="fc bfc" id="L138" title="All 2 branches covered.">    if (bigInteger2.intValue() == 0) {</span>
+<span class="fc" id="L139">      q1BigInteger = BigInteger.ONE;</span>
+<span class="fc" id="L140">      q2BigInteger = BigInteger.ZERO;</span>
+<span class="fc" id="L141">      return bigInteger1;</span>
+    }
+<span class="fc" id="L143">    BigInteger ans = gcd(bigInteger2, bigInteger1.mod(bigInteger2));</span>
+<span class="fc" id="L144">    BigInteger temp = q1BigInteger;</span>
+<span class="fc" id="L145">    q1BigInteger = q2BigInteger;</span>
+<span class="fc" id="L146">    q2BigInteger = temp.subtract(bigInteger1.divide(bigInteger2).multiply(q2BigInteger));</span>
+<span class="fc" id="L147">    return ans;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -1,0 +1,6 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Assignment for class CS5010,edu.neu.ccs.cs5010.assignment2,Patient,27,343,12,46,7,84,13,37,1,20
+Assignment for class CS5010,edu.neu.ccs.cs5010.assignment2,Room,24,125,7,7,7,38,6,15,1,13
+Assignment for class CS5010,edu.neu.ccs.cs5010.assignment2,ERSimulator,67,181,13,7,21,32,11,4,2,3
+Assignment for class CS5010,edu.neu.ccs.cs5010.assignment2,Hospital,119,745,25,49,25,161,23,32,2,16
+Assignment for class CS5010,edu.neu.ccs.cs5010.assignment2,MyPriorityQueue,82,187,23,17,23,44,21,17,3,15

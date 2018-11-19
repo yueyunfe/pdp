@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>EmailGenerator.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Assignment for class CS5010</a> &gt; <a href="index.source.html" class="el_package">edu.neu.ccs.cs5010.assignment3</a> &gt; <span class="el_source">EmailGenerator.java</span></div><h1>EmailGenerator.java</h1><pre class="source lang-java linenums">package edu.neu.ccs.cs5010.assignment3;
+
+
+import java.io.*;
+import java.nio.charset.Charset;
+
+<span class="fc" id="L7">public class EmailGenerator {</span>
+
+  private static String fileName;
+  private static String template;
+<span class="fc" id="L11">  private static String error = &quot;\n&quot;;</span>
+  private static InfoFactory infoFactory;
+  private static String departureCity;
+  private static String destinationCity;
+  private static String flightNumber;
+  private static String folderName;
+  private static String event;
+  private static final String INSTRUCTION =
+          &quot;Usage:\n&quot; +
+                  &quot;--email-template &lt;file&gt;                               accepts a filename that holds the email template.\n&quot; +
+                  &quot;--output-dir &lt;path&gt;                                   accepts the name of a folder, all output is placed in this folder\n&quot; +
+                  &quot;--csv-file &lt;path&gt;                                     accepts the name of the csv file to process, in a following format:Flight&lt;id&gt;From&lt;departure-city&gt;To&lt;destination-city&gt;.csv\n&quot; +
+                  &quot;--event &lt;details&gt;                                     specifies if the delay refers to departure/arrival&quot;;
+
+
+  public static void main(String[] argv) {
+
+<span class="fc" id="L28">    System.out.println(INSTRUCTION + &quot;\nPlease enter: \n&quot;);</span>
+    //check for the user input if valid
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">    if (!checkInput(argv)) {</span>
+<span class="nc" id="L31">      System.out.println(error);</span>
+<span class="nc" id="L32">      return;</span>
+    }
+
+<span class="fc" id="L35">    infoFactory = new InfoFactory(fileName, template);</span>
+<span class="fc" id="L36">    infoFactory.setDepartureCity(departureCity);</span>
+<span class="fc" id="L37">    infoFactory.setDestinationCity(destinationCity);</span>
+<span class="fc" id="L38">    infoFactory.setFlightNumber(flightNumber);</span>
+
+    //check for if reading csv file successfully
+<span class="fc bfc" id="L41" title="All 2 branches covered.">    if (!infoFactory.readInfoFile()) {</span>
+<span class="fc" id="L42">      throw new IllegalArgumentException(&quot;Fail to read the csv file&quot;);</span>
+    }
+    //check for if reading template file successfully
+<span class="fc bfc" id="L45" title="All 2 branches covered.">    if (!infoFactory.readTemplateFile()) {</span>
+<span class="fc" id="L46">      throw new IllegalArgumentException(&quot;Fail to read the template file&quot;);</span>
+    }
+
+    //create the folder for output
+<span class="fc" id="L50">    File file = new File(folderName);</span>
+<span class="pc bpc" id="L51" title="3 of 4 branches missed.">    if (!file.exists()&amp;&amp;!file.mkdir()) {</span>
+<span class="nc" id="L52">        throw new IllegalArgumentException(&quot;Fail to create folder&quot;);</span>
+    }
+
+    //pull the information and output to the folder
+<span class="fc bfc" id="L56" title="All 2 branches covered.">    for (int i = 1; i &lt; infoFactory.getInfoList().size(); i++) {</span>
+      //process replacement
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">      if (!infoFactory.replaceTemplatePlaceHolder(infoFactory.getInfoList().get(i), event)) {</span>
+<span class="nc" id="L59">        System.out.println(&quot;Incorrect for replacing&quot;);</span>
+<span class="nc" id="L60">        return;</span>
+      }
+      //output the result
+      try {
+<span class="fc" id="L64">        File childFile = new File(file.getPath() + &quot;/email&quot; + i + &quot;.txt&quot;);</span>
+<span class="fc" id="L65">        PrintWriter outPutStream = new PrintWriter(new OutputStreamWriter(new FileOutputStream(childFile), Charset.defaultCharset()));</span>
+<span class="fc" id="L66">        outPutStream.println(infoFactory.getResult());</span>
+<span class="fc" id="L67">        outPutStream.close();</span>
+<span class="nc" id="L68">      } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L69">        e.printStackTrace();</span>
+<span class="fc" id="L70">      }</span>
+    }
+
+<span class="fc" id="L73">  }</span>
+
+  /**
+   * This is the method to factory split and process the user input in order to get
+   * the file name
+   *
+   * @param regex       expression for slit
+   * @param inputString user input
+   * @param fileType    template||msv file||output directory||event
+   * @return the name of file for 4 different category, null if not exists.
+   */
+  private static String getInputFileName(String regex, String inputString, String fileType) {
+    //split at eg. --email-template
+<span class="fc" id="L86">    String[] parts = inputString.split(regex);</span>
+    //get all string after --email-template
+<span class="fc bfc" id="L88" title="All 2 branches covered.">    if (parts.length == 1) {</span>
+<span class="fc" id="L89">      error += &quot;Error:  Missing &quot; + fileType + &quot; file \n&quot; + INSTRUCTION;</span>
+<span class="fc" id="L90">      return null;</span>
+    }
+<span class="fc" id="L92">    String restString = parts[1].trim();</span>
+<span class="fc" id="L93">    String templateName = &quot;&quot;;</span>
+    //get the name from the rest of string
+<span class="fc bfc" id="L95" title="All 4 branches covered.">    if (restString.contains(&quot;--&quot;) &amp;&amp; restString.charAt(0) != '-') {</span>
+<span class="fc" id="L96">      templateName = restString.substring(0, restString.indexOf(&quot;--&quot;)).trim();</span>
+<span class="pc bpc" id="L97" title="1 of 4 branches missed.">    } else if (restString.length() == 0 || restString.charAt(0) == '-') {</span>
+<span class="fc" id="L98">      error += &quot;Error:  Missing &quot; + fileType + &quot; file \n&quot; + INSTRUCTION;</span>
+<span class="fc" id="L99">      return null;</span>
+    } else {
+<span class="fc" id="L101">      templateName = restString;</span>
+    }
+<span class="fc" id="L103">    return templateName;</span>
+  }
+
+  /**
+   * This is used to check if the user input is valid or not
+   *
+   * @param args the command from user side
+   * @return true if input is valid
+   */
+
+  public static boolean checkInput(String[] args) {
+    //check for command correctness
+<span class="fc" id="L115">    String input = &quot;&quot;;</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">    for (int i = 0; i &lt; args.length; i++) {</span>
+<span class="fc" id="L117">      input += args[i];</span>
+    }
+<span class="fc" id="L119">    Boolean missingCommand = false;</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">    if (!input.contains(&quot;--event&quot;)) {</span>
+<span class="fc" id="L121">      error += &quot;Error:  Missing event command \n&quot;;</span>
+<span class="fc" id="L122">      missingCommand = true;</span>
+    }
+<span class="fc bfc" id="L124" title="All 2 branches covered.">    if (!input.contains(&quot;--email-template&quot;)) {</span>
+<span class="fc" id="L125">      error += &quot;Error:  Missing template command \n&quot;;</span>
+<span class="fc" id="L126">      missingCommand = true;</span>
+    }
+<span class="fc bfc" id="L128" title="All 2 branches covered.">    if (!input.contains(&quot;--output-dir&quot;)) {</span>
+<span class="fc" id="L129">      error += &quot;Error:  Missing output directory command \n&quot;;</span>
+<span class="fc" id="L130">      missingCommand = true;</span>
+    }
+<span class="fc bfc" id="L132" title="All 2 branches covered.">    if (!input.contains(&quot;--csv-file&quot;)) {</span>
+<span class="fc" id="L133">      error += &quot;Error: Missing csv file command \n&quot;;</span>
+<span class="fc" id="L134">      missingCommand = true;</span>
+    }
+<span class="fc bfc" id="L136" title="All 2 branches covered.">    if (missingCommand) {</span>
+<span class="fc" id="L137">      error += INSTRUCTION;</span>
+<span class="fc" id="L138">      return false;</span>
+    }
+
+    //check for email template
+
+<span class="fc" id="L143">    String templateName = getInputFileName(&quot;--email-template&quot;, input, &quot;template&quot;);</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">    if (templateName == null) {</span>
+<span class="fc" id="L145">      return false;</span>
+    }
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">    if (templateName.contains(&quot;.&quot;)) {</span>
+<span class="fc" id="L148">      template = templateName;</span>
+<span class="fc" id="L149">      String[] fileName = templateName.split(&quot;\\.&quot;);</span>
+<span class="fc" id="L150">      String prefix = fileName[0].trim();</span>
+<span class="fc" id="L151">      String suffix = fileName[1].trim();</span>
+<span class="pc bpc" id="L152" title="2 of 6 branches missed.">      if (prefix.length() == 0 || suffix.length() == 0 || !suffix.equals(&quot;txt&quot;)) {</span>
+<span class="fc" id="L153">        error += &quot;Error:  Wrong format of template file \n&quot; + INSTRUCTION;</span>
+<span class="fc" id="L154">        return false;</span>
+      }
+<span class="fc" id="L156">    } else {</span>
+<span class="nc" id="L157">      error += &quot;Error:  Wrong format of template file \n&quot; + INSTRUCTION;</span>
+<span class="nc" id="L158">      return false;</span>
+    }
+
+
+    //check for output directory
+<span class="fc" id="L163">    String directoryName = getInputFileName(&quot;--output-dir&quot;, input, &quot;directory&quot;);</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">    if (directoryName == null) {</span>
+<span class="fc" id="L165">      return false;</span>
+    }
+<span class="pc bpc" id="L167" title="1 of 2 branches missed.">    if (directoryName.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L168">      error += &quot;Error:  Missing directory name \n&quot; + INSTRUCTION;</span>
+<span class="nc" id="L169">      return false;</span>
+    }
+<span class="fc" id="L171">    folderName = directoryName;</span>
+
+
+    //check for csv file command
+
+<span class="fc" id="L176">    String csvFileName = getInputFileName(&quot;--csv-file&quot;, input, &quot;csv&quot;);</span>
+<span class="pc bpc" id="L177" title="1 of 2 branches missed.">    if (csvFileName == null) {</span>
+<span class="nc" id="L178">      return false;</span>
+    }
+<span class="fc bfc" id="L180" title="All 2 branches covered.">    if (csvFileName.contains(&quot;.&quot;)) {</span>
+<span class="fc" id="L181">      fileName = csvFileName;</span>
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">      if (!setFlightInfo(fileName)) {</span>
+<span class="nc" id="L183">        return false;</span>
+      }
+<span class="fc" id="L185">      String[] fileName = csvFileName.split(&quot;\\.&quot;);</span>
+<span class="fc" id="L186">      String prefix = fileName[0].trim();</span>
+<span class="fc" id="L187">      String suffix = fileName[1].trim();</span>
+<span class="pc bpc" id="L188" title="2 of 6 branches missed.">      if (prefix.length() == 0 || suffix.length() == 0 || !suffix.equals(&quot;csv&quot;)) {</span>
+<span class="fc" id="L189">        error += &quot;Error:  Wrong format of csv file \n&quot; + INSTRUCTION;</span>
+<span class="fc" id="L190">        return false;</span>
+      }
+<span class="fc" id="L192">    } else {</span>
+<span class="fc" id="L193">      error += &quot;Error:  Wrong format of csv file \n&quot; + INSTRUCTION;</span>
+<span class="fc" id="L194">      return false;</span>
+    }
+
+
+    //check for event command --email-template email-template.txt --output-dir emails --csv-file Flight363FromSeattleToBoston.csv --event arrival
+    //--email-template email-templ.txt --output-dir emails --event arrival --csv-file Flight363FromSeattleToBoston.csv
+<span class="fc" id="L200">    String eventName = getInputFileName(&quot;--event&quot;, input, &quot;event&quot;);</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">    if (eventName == null) {</span>
+<span class="fc" id="L202">      return false;</span>
+    }
+<span class="pc bpc" id="L204" title="1 of 4 branches missed.">    if (!(eventName.equals(&quot;departure&quot;) || eventName.equals(&quot;arrival&quot;))) {</span>
+<span class="fc" id="L205">      error += &quot;Error:  wrong event name \n&quot; + INSTRUCTION;</span>
+<span class="fc" id="L206">      return false;</span>
+    }
+<span class="fc" id="L208">    event = eventName;</span>
+
+<span class="fc" id="L210">    return true;</span>
+  }
+
+  /**
+   * This is the method to pull the flight information: flight number, destination,departure city
+   * And then set those information for InfoFactory
+   *
+   * @param file the file name of the csv file
+   * @return ture if information was set successfully
+   */
+  public static boolean setFlightInfo(String file) {
+<span class="fc bfc" id="L221" title="All 2 branches covered.">    if (!file.contains(&quot;.&quot;)) {</span>
+<span class="fc" id="L222">      error += &quot;Error:  csv file format wrong&quot;;</span>
+<span class="fc" id="L223">      return false;</span>
+    }
+<span class="pc bpc" id="L225" title="1 of 4 branches missed.">    if (!file.contains(&quot;From&quot;) || !file.contains(&quot;To&quot;)) {</span>
+<span class="fc" id="L226">      error += &quot;Error:  --csv-file argument does not contain departure-city or destination-city&quot;;</span>
+<span class="fc" id="L227">      return false;</span>
+    }
+<span class="fc" id="L229">    String sufix = file.substring(0, file.indexOf(&quot;From&quot;));</span>
+<span class="pc bpc" id="L230" title="1 of 4 branches missed.">    if (sufix.length() == 0 || !sufix.contains(&quot;Flight&quot;)) {</span>
+<span class="fc" id="L231">      error += &quot;Error:  --csv-file argument does not have correct Flight info&quot; + INSTRUCTION;</span>
+<span class="fc" id="L232">      return false;</span>
+    } else {
+<span class="fc" id="L234">      flightNumber = sufix.substring(sufix.indexOf(&quot;Flight&quot;) + 6, file.indexOf(&quot;From&quot;));</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">      if (flightNumber.length() == 0) {</span>
+<span class="fc" id="L236">        error += &quot;Error:  --csv-file argument does not have flight number&quot; + INSTRUCTION;</span>
+<span class="fc" id="L237">        return false;</span>
+      }
+    }
+<span class="fc" id="L240">    departureCity = file.substring(file.indexOf(&quot;From&quot;) + 4, file.indexOf(&quot;To&quot;));</span>
+<span class="pc bpc" id="L241" title="1 of 2 branches missed.">    if (departureCity.length() == 0) {</span>
+<span class="nc" id="L242">      error += &quot;Error:  --csv-file argument does not contain departure city&quot; + INSTRUCTION;</span>
+<span class="nc" id="L243">      return false;</span>
+    }
+<span class="fc" id="L245">    destinationCity = file.substring(file.indexOf(&quot;To&quot;) + 2, file.indexOf(&quot;.&quot;));</span>
+<span class="fc bfc" id="L246" title="All 2 branches covered.">    if (destinationCity.length() == 0) {</span>
+<span class="fc" id="L247">      error += &quot;Error:  --csv-file argument does not contain destination city&quot; + INSTRUCTION;</span>
+<span class="fc" id="L248">      return false;</span>
+    }
+<span class="fc" id="L250">    return true;</span>
+  }
+
+  public String getError() {
+<span class="fc" id="L254">    return error;</span>
+  }
+
+  //--email-template email-template.txt --output-dir emails --csv-file Flight363FromSeattleToBoston.csv --event arrival
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

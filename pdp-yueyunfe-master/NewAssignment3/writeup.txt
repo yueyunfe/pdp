@@ -1,0 +1,11 @@
+
+
+Two classes
+
+1. EmailGenerator: control the user input and run the program
+
+2. InfoFactory: read and pull the information from txt or csv files, and replace the placeHolder as well
+
+handling errors happened in the EmailGenerator and InfoFactory class
+
+Not working for sending email.

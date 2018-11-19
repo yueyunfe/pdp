@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>HospitalTest xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/edu/neu/ccs/cs5010/assignment2/HospitalTest.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> edu.neu.ccs.cs5010.assignment2;
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> org.junit.Before;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.*;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../edu/neu/ccs/cs5010/assignment2/HospitalTest.html">HospitalTest</a> {
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>    <strong class="jxr_keyword">private</strong> MyPriorityQueue myPriorityQueue;
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>    <strong class="jxr_keyword">private</strong> Patient patient = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>    <strong class="jxr_keyword">private</strong> Patient patient2 = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>    <strong class="jxr_keyword">private</strong> Room room1 = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>    <strong class="jxr_keyword">private</strong> Room room2 = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>    <strong class="jxr_keyword">private</strong> MyPriorityQueue&lt;Room&gt; waiting_room;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>    <strong class="jxr_keyword">private</strong> MyPriorityQueue&lt;Patient&gt; patients;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>    <strong class="jxr_keyword">private</strong> MyPriorityQueue&lt;Patient&gt; examed;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>    <strong class="jxr_keyword">private</strong> MyPriorityQueue&lt;Room&gt; exam_room;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>    <strong class="jxr_keyword">private</strong> Hospital hospital = <strong class="jxr_keyword">new</strong> Hospital(2, 2);
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>    @Before
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setUp() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>      waiting_room = <strong class="jxr_keyword">new</strong> MyPriorityQueue&lt;Room&gt;();
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>      patients = <strong class="jxr_keyword">new</strong> MyPriorityQueue&lt;Patient&gt;();
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>      examed = <strong class="jxr_keyword">new</strong> MyPriorityQueue&lt;Patient&gt;();
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>      exam_room = <strong class="jxr_keyword">new</strong> MyPriorityQueue&lt;Room&gt;();
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>      room1 = <strong class="jxr_keyword">new</strong> Room(2, 1);
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>      room2 = <strong class="jxr_keyword">new</strong> Room(3, 2);
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>      room1.setInuse(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>      room1.setTimeUse(1000);
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>      room1.getTimeUse();
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      assertEquals(-1, room1.compareTo(room2));
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>      patient = <strong class="jxr_keyword">new</strong> Patient(3, 2, <span class="jxr_string">"YYF"</span>, 3);
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      patient2 = <strong class="jxr_keyword">new</strong> Patient(3, 3, <span class="jxr_string">"NS"</span>, 2);
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>      patient.equals(patient2);
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>      patient.getTemperature();
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>      patient.getPatientId();
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>      patient.getDeparturetime();
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      patient.setDuration(5 * 60 * 1000);
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>      patient2.setDuration(6 * 60 * 1000);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      room1.addPatient(patient2);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      room2.addPatient(patient);
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>      waiting_room.add(room1);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      waiting_room.add(room2);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>      Room room3 = <strong class="jxr_keyword">new</strong> Room(3, 3);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      Room room4 = <strong class="jxr_keyword">new</strong> Room(4,4);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      room3.setPercentageBusy(100);
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      room4.setPercentageBusy(150);
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      room3.setInuse(false);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      room4.setInuse(false);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      exam_room.add(room4);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      exam_room.add(room3);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>    }
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>    @Test
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> registerPatient() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>      assertEquals(2, waiting_room.peek().getRoomId());
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>    }
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>    @Test
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> getTailRoom() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      assertEquals(0, hospital.getTail(hospital.getWaitingRoom()).getRoomId());
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      assertFalse(hospital.doneExam(room1));
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>    }
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2017. All rights reserved.</div>
+</body>
+</html>

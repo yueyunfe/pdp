@@ -1,0 +1,21 @@
+1.
+    I organized my program as individual classes. Each class did their own jobs that provide necessary functions.
+
+2.
+    The major classes are patient and hospital classes. For patient class, it works as an individual patient, the patient
+    has his/her own name, id, waiting time as so on.
+
+    The Hospital class works as a real hospital, it register the patient when the patient comes, then it provide the functions
+    for such as assign the patient, check room availability as so on
+3.
+
+    I did test for ADT sorting to see if I get the order that I want.I did not have any bugs for sorting and as well as other parts.
+
+4.
+
+    This is the first time I used the priority queue, I am definitely learned how to use it.
+
+5.
+    Well, I did not run for 8 hours. But when I tested as less as 5 rooms in a high frequency patients coming, the waiting time is
+    about 2 hours, which we do not want it happen in the real life. So the more room we have, the better performance will be if the
+    coming frequency is instant.

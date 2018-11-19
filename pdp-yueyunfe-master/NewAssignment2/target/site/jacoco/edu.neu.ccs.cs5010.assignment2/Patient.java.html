@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Patient.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Assignment for class CS5010</a> &gt; <a href="index.source.html" class="el_package">edu.neu.ccs.cs5010.assignment2</a> &gt; <span class="el_source">Patient.java</span></div><h1>Patient.java</h1><pre class="source lang-java linenums">package edu.neu.ccs.cs5010.assignment2;
+///edu.neu.ccs.cs5010.assignment2.Patient individual class property
+
+
+import java.time.LocalDateTime;
+
+public class Patient implements Comparable&lt;Patient&gt; {
+
+  private double temperature;
+  private double bloodpressure;
+  private int age;
+  private int patientId;
+  private LocalDateTime arrivaltime;      //time of arrival
+<span class="fc" id="L14">  private double rating = -1;                  //emergency rating</span>
+  private LocalDateTime departuretime;    //time of departure
+<span class="fc" id="L16">  private boolean examed = false;   // used to determine if the patient leaved</span>
+  private long duration;        //length of time to be treated in millisec
+  private long waiting;           //length of time for waiting
+
+
+  //different ages for each groups
+<span class="fc" id="L22">  private final int BABY = 3;</span>
+<span class="fc" id="L23">  private final int OLDER = 80;</span>
+<span class="fc" id="L24">  private final int YOUNG = 20;</span>
+<span class="fc" id="L25">  private final int CHILD = 10;</span>
+<span class="fc" id="L26">  private final int OLD = 50;</span>
+
+
+<span class="fc" id="L29">  private final double FEVERTEMP = 99.5; //fever temperature of human in F</span>
+<span class="fc" id="L30">  private final double BADFEVERTEMP = 104.0; //worse fever temperature of human in F</span>
+<span class="fc" id="L31">  private final double HIGHBLOODPRESSURE = 140.0; //Highest blood pressure in mm HG</span>
+<span class="fc" id="L32">  private final int AGE_MAX = 140;               //maximum age</span>
+<span class="fc" id="L33">  private final int LEVEL_MAX = 10;               //maximum level of severe</span>
+
+
+  public double getRating() {
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">    if (rating == -1) {</span>
+<span class="nc" id="L38">      throw new IllegalArgumentException(&quot;Not enough info provided for rating&quot;);</span>
+    }
+<span class="fc" id="L40">    return rating;</span>
+  }
+
+  //default constructor
+<span class="fc" id="L44">  public Patient() {</span>
+<span class="fc" id="L45">    throw new IllegalArgumentException(&quot;age,id, name needed&quot;);</span>
+  }
+
+  //constructor
+  //level is a level of severe ranging from 1-10 given by the nurse
+<span class="fc" id="L50">  public Patient(int age, int patientId, String name, double level) {</span>
+<span class="pc bpc" id="L51" title="1 of 4 branches missed.">    if (level &lt; 1 || level &gt; LEVEL_MAX) {</span>
+<span class="fc" id="L52">      throw new IllegalArgumentException(&quot;Please give a valid severe level range from 1-10&quot;);</span>
+    }
+<span class="pc bpc" id="L54" title="1 of 4 branches missed.">    if (age &gt;= AGE_MAX || age &lt; 0) {</span>
+<span class="fc" id="L55">      throw new IllegalArgumentException(&quot;Please give a valid age&quot;);</span>
+    }
+<span class="fc bfc" id="L57" title="All 2 branches covered.">    if (patientId &lt; 0) {</span>
+<span class="fc" id="L58">      throw new IllegalArgumentException(&quot;Please give a valid id&quot;);</span>
+    }
+<span class="fc bfc" id="L60" title="All 2 branches covered.">    if (name == null) {</span>
+<span class="fc" id="L61">      throw new IllegalArgumentException(&quot;Please provide a name&quot;);</span>
+    }
+<span class="fc" id="L63">    arrivaltime = LocalDateTime.now();</span>
+<span class="fc" id="L64">    this.age = age;</span>
+<span class="fc" id="L65">    this.patientId = patientId;</span>
+<span class="fc" id="L66">    calculateRating(level);</span>
+<span class="fc" id="L67">  }</span>
+
+  /**
+   * This method used to calculate the rating
+   *
+   * @param level is a level of severe ranging from 1-10 given by the nurse
+   */
+  private void calculateRating(double level) {
+<span class="fc" id="L75">    double coefficient = 1;</span>
+<span class="fc bfc" id="L76" title="All 4 branches covered.">    if (this.age &lt;= BABY || this.age &gt; OLDER) {</span>
+<span class="fc" id="L77">      coefficient += 1;</span>
+<span class="pc bpc" id="L78" title="2 of 8 branches missed.">    } else if ((this.age &gt; BABY &amp;&amp; this.age &lt;= CHILD) || (this.age &gt; OLD &amp;&amp; this.age &lt;= OLDER)) {</span>
+<span class="fc" id="L79">      coefficient += 0.8;</span>
+<span class="pc bpc" id="L80" title="1 of 4 branches missed.">    } else if (this.age &gt; CHILD &amp;&amp; this.age &lt;= YOUNG) {</span>
+<span class="fc" id="L81">      coefficient += 0.6;</span>
+    } else {
+<span class="fc" id="L83">      coefficient += 0.5;</span>
+    }
+
+    //checking the fever condition
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">    if (this.temperature - BADFEVERTEMP &gt; 0) {</span>
+<span class="nc" id="L88">      coefficient += 1.5;  //bad fever</span>
+    } else {
+      //minor fever
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">      if (this.temperature - FEVERTEMP &gt; 0) {</span>
+<span class="nc" id="L92">        coefficient += 1;</span>
+      }
+    }
+    //Checking for blood pressure
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">    if (this.bloodpressure - HIGHBLOODPRESSURE &gt; 0) {</span>
+<span class="nc" id="L97">      coefficient += 0.5;</span>
+    }
+
+    //The maximum rating will be 100
+<span class="fc" id="L101">    rating = coefficient * 15 + 4 * level;</span>
+
+<span class="fc" id="L103">  }</span>
+
+  public int getPatientId() {
+<span class="fc" id="L106">    return patientId;</span>
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+<span class="fc bfc" id="L111" title="All 2 branches covered.">    if (this == obj) {</span>
+<span class="fc" id="L112">      return true;</span>
+    }
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">    if (!(obj instanceof Patient)) {</span>
+<span class="nc" id="L115">      return false;</span>
+    }
+
+<span class="fc" id="L118">    Patient patient = (Patient) obj;</span>
+
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">    return patientId == patient.patientId;</span>
+  }
+
+  @Override
+  public int hashCode() {
+<span class="nc" id="L125">    return patientId;</span>
+  }
+
+  public void setArrivaltime(LocalDateTime arrivaltime) {
+<span class="fc" id="L129">    this.arrivaltime = arrivaltime;</span>
+<span class="fc" id="L130">  }</span>
+
+  //the lower the priority is
+  //Wont be same priority because the arrival time will be different
+  public int compareTo(Patient other) {
+    //waiting
+<span class="fc bfc" id="L136" title="All 2 branches covered.">    if (!examed) {</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">      if (Double.compare(this.rating, other.getRating()) &gt; 0) {</span>
+<span class="fc" id="L138">        return -1;</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">      } else if (Double.compare(this.rating, other.getRating()) == 0) {</span>
+        //compare the time then
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">        if (other.getPatientId() &lt; 0) {</span>
+<span class="nc" id="L142">          return 0;</span>
+        }
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        if (arrivalComparison(other)) {</span>
+<span class="fc" id="L145">          return -1;</span>
+        }
+<span class="fc" id="L147">        return 1;</span>
+      }
+<span class="fc" id="L149">      return 1;</span>
+    }
+    //departure
+    else {
+<span class="fc bfc" id="L153" title="All 2 branches covered.">      if (this.departuretime.isBefore(other.getDeparturetime()) ||</span>
+<span class="fc bfc" id="L154" title="All 2 branches covered.">              this.departuretime.isEqual(other.getDeparturetime())) {</span>
+<span class="fc" id="L155">        return -1;</span>
+      }
+<span class="fc" id="L157">      return 1;</span>
+    }
+  }
+
+
+  /**
+   * This method compares the arrival of patient with the other
+   *
+   * @param other the other patient to compare
+   * @return true if this patient arrived before the other one
+   */
+  protected boolean arrivalComparison(Patient other) {
+<span class="fc bfc" id="L169" title="All 2 branches covered.">    if (this.arrivaltime.isBefore(other.getArrivaltime())) {</span>
+<span class="fc" id="L170">      return true;</span>
+    }
+<span class="fc" id="L172">    return false;</span>
+  }
+
+
+  public LocalDateTime getArrivaltime() {
+<span class="fc" id="L177">    return arrivaltime;</span>
+  }
+
+  public double getTemperature() {
+<span class="fc" id="L181">    return temperature;</span>
+  }
+
+  public void setTemperature(double temperature) {
+<span class="fc" id="L185">    this.temperature = temperature;</span>
+<span class="fc" id="L186">  }</span>
+
+
+  public void setBloodpressure(double bloodpressure) {
+<span class="fc" id="L190">    this.bloodpressure = bloodpressure;</span>
+<span class="fc" id="L191">  }</span>
+
+  public LocalDateTime getDeparturetime() {
+<span class="fc" id="L194">    return departuretime;</span>
+  }
+
+  public void setDeparturetime(LocalDateTime departuretime) {
+<span class="fc" id="L198">    this.departuretime = departuretime;</span>
+<span class="fc" id="L199">  }</span>
+
+  public void setExamed(boolean examed) {
+<span class="fc" id="L202">    this.examed = examed;</span>
+<span class="fc" id="L203">  }</span>
+
+  public long getDuration() {
+<span class="fc" id="L206">    return duration;</span>
+  }
+
+  public void setDuration(long duration) {
+<span class="fc" id="L210">    this.duration = duration;</span>
+<span class="fc" id="L211">  }</span>
+
+  public long getWaiting() {
+<span class="fc" id="L214">    return waiting;</span>
+  }
+
+  public void setWaiting(long waiting) {
+<span class="fc" id="L218">    this.waiting = waiting;</span>
+<span class="fc" id="L219">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

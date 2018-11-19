@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Bank.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Assignment for class CS5010</a> &gt; <a href="index.source.html" class="el_package">edu.neu.ccs.cs5010.assignment5</a> &gt; <span class="el_source">Bank.java</span></div><h1>Bank.java</h1><pre class="source lang-java linenums">package edu.neu.ccs.cs5010.assignment5;
+
+import java.io.*;
+import java.math.BigInteger;
+import java.nio.charset.Charset;
+import java.util.*;
+
+public class Bank {
+  private RSA rsa;
+  private int capacity;
+  private int clientsNumber;
+  private ArrayList&lt;Client&gt; clients;
+<span class="fc" id="L13">  private ArrayList&lt;Client&gt; allValidClients = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L14">  private ArrayList&lt;Client&gt; allInvalidClients = new ArrayList&lt;&gt;();</span>
+  private double fractionOfInvalid;
+  private PrintWriter outPutStream;
+  private String outputFileName;
+<span class="fc" id="L18">  private final int MAXMESSAGE = 40000;</span>
+<span class="fc" id="L19">  private final int MAXWITHDRAW = 3000;</span>
+<span class="fc" id="L20">  private final int MAXDEPOSIT = 2000;</span>
+<span class="fc" id="L21">  private String rejectedDeposit = &quot;Rejected Deposit ids: &quot;;</span>
+<span class="fc" id="L22">  private String rejectedWithdraw = &quot;Rejected Withdraw ids: &quot;;</span>
+
+<span class="fc" id="L24">  public Bank(int capacity, int requestNumber, double fractionOfInvalid, String fileName) {</span>
+<span class="fc" id="L25">    rsa = new RSA();</span>
+<span class="fc" id="L26">    this.capacity = capacity;</span>
+<span class="fc" id="L27">    clients = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L28">    this.fractionOfInvalid = fractionOfInvalid;</span>
+<span class="fc" id="L29">    this.clientsNumber = requestNumber;</span>
+<span class="fc" id="L30">    this.outputFileName = fileName;</span>
+<span class="fc" id="L31">    registerClients();</span>
+<span class="fc" id="L32">  }</span>
+
+  /**
+   * Pick number of fail and success cases based on the ratio from input
+   */
+  public void simulateTransaction() {
+<span class="fc" id="L38">    int invalidCases = (int) Math.round(fractionOfInvalid * clientsNumber);</span>
+<span class="fc" id="L39">    Random random = new Random();</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">    for (int i = 0; i &lt; invalidCases; i++) {</span>
+<span class="fc" id="L41">      int index = random.nextInt(capacity - 1);</span>
+      Client client;
+<span class="fc" id="L43">      client = allInvalidClients.get(index);</span>
+<span class="fc" id="L44">      clients.add(client);</span>
+    }
+<span class="fc bfc" id="L46" title="All 2 branches covered.">    for (int i = 0; i &lt; (clientsNumber - invalidCases); i++) {</span>
+<span class="fc" id="L47">      int index = random.nextInt(capacity - 1);</span>
+      Client client;
+<span class="fc" id="L49">      client = allValidClients.get(index);</span>
+<span class="fc" id="L50">      clients.add(client);</span>
+    }
+<span class="fc" id="L52">  }</span>
+
+  public ArrayList&lt;Client&gt; getClients() {
+<span class="fc" id="L55">    return clients;</span>
+  }
+
+  /**
+   * Pre-register 2 lists of clients, one list contains all the valid message cases
+   * and the other one contains all the fail cases
+   */
+  public void registerClients() {
+<span class="fc" id="L63">    Random random = new Random();</span>
+<span class="fc" id="L64">    int clientId = 0;</span>
+    while (true) {
+<span class="fc" id="L66">      int message = random.nextInt(MAXMESSAGE) + 10;</span>
+<span class="fc" id="L67">      String number = String.valueOf(message);</span>
+<span class="fc" id="L68">      String restNumber = String.valueOf(message).substring(0, number.length() - 1);</span>
+      //fill the valid client list
+<span class="fc" id="L70">      int lastDigit = message % 10;</span>
+<span class="fc" id="L71">      int money = Integer.parseInt(restNumber);</span>
+<span class="fc" id="L72">      Client client = new Client(clientId, message, rsa);</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">      if (lastDigit &gt;= 5) {       //withdraw</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        if (money &lt;= MAXWITHDRAW) {</span>
+          //valid
+<span class="fc bfc" id="L76" title="All 2 branches covered.">          if (allValidClients.size() &lt; capacity) {</span>
+<span class="fc" id="L77">            allValidClients.add(client);</span>
+          }
+
+        } else {
+<span class="fc bfc" id="L81" title="All 2 branches covered.">          if (allInvalidClients.size() &lt; capacity) {</span>
+<span class="fc" id="L82">            allInvalidClients.add(client);</span>
+          }
+        }
+      } else { //deposit
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (money &lt;= MAXDEPOSIT) {</span>
+          //valid
+<span class="fc bfc" id="L88" title="All 2 branches covered.">          if (allValidClients.size() &lt; capacity) {</span>
+<span class="fc" id="L89">            allValidClients.add(client);</span>
+          }
+        } else {
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">          if (allInvalidClients.size() &lt; capacity) {</span>
+<span class="fc" id="L93">            allInvalidClients.add(client);</span>
+          }
+        }
+      }
+<span class="fc bfc" id="L97" title="All 4 branches covered.">      if (allInvalidClients.size() == capacity &amp;&amp; allValidClients.size() == capacity) {</span>
+<span class="fc" id="L98">        break;</span>
+      }
+<span class="fc" id="L100">      clientId++;</span>
+<span class="fc" id="L101">    }</span>
+<span class="fc" id="L102">  }</span>
+
+  /**
+   * Do the encryption for every client who sent the request
+   */
+  public void doEncryption() {
+<span class="fc bfc" id="L108" title="All 2 branches covered.">    for (int i = 0; i &lt; clients.size(); i++) {</span>
+<span class="fc" id="L109">      Client client = clients.get(i);</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">      if (!client.sendRequest(rsa)) {</span>
+<span class="fc" id="L111">        continue;</span>
+      }
+<span class="fc" id="L113">      client.setEncrypt(true);</span>
+    }
+
+<span class="fc" id="L116">  }</span>
+
+  /**
+   * Do the decryption for every client from the bank side
+   * And compare the message with the decryption,output the result
+   */
+  public boolean doDecryption() {
+<span class="pc bpc" id="L123" title="1 of 2 branches missed.">    if (!creatFolderAndFile()) {</span>
+<span class="nc" id="L124">      throw new IllegalArgumentException(&quot;Fail to open create the file&quot;);</span>
+    }
+
+<span class="fc bfc" id="L127" title="All 2 branches covered.">    for (int i = 0; i &lt; clients.size(); i++) {</span>
+<span class="fc" id="L128">      Client client = clients.get(i);</span>
+      //this client was failed to encrypt due to incorrect message
+<span class="fc bfc" id="L130" title="All 2 branches covered.">      if (!client.isEncryption()) {</span>
+<span class="fc" id="L131">        outputResult(false, false, client, i);</span>
+<span class="fc" id="L132">        continue;</span>
+      }
+<span class="fc" id="L134">      BigInteger publickey = client.getPublicKey();</span>
+<span class="fc" id="L135">      BigInteger digitalSignature = client.getDigitalSignature();</span>
+<span class="fc" id="L136">      BigInteger parameterN = client.getKeySecond();</span>
+<span class="fc" id="L137">      BigInteger decriptionNumber = rsa.decrypt(digitalSignature, publickey, parameterN);</span>
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">      if (decriptionNumber.equals(BigInteger.valueOf(client.getMessage()))) {</span>
+<span class="fc" id="L139">        outputResult(true, true, client, i);</span>
+      } else {
+<span class="nc" id="L141">        outputResult(true, false, client, i);</span>
+      }
+    }
+<span class="fc" id="L144">    outPutStream.close();</span>
+<span class="fc" id="L145">    System.out.println(findSamePublicKey() + &quot; transactions with same public key&quot;);</span>
+<span class="fc" id="L146">    printTransactionInfo();</span>
+<span class="fc" id="L147">    System.out.println(rejectedDeposit);</span>
+<span class="fc" id="L148">    System.out.println(rejectedWithdraw);</span>
+<span class="fc" id="L149">    return true;</span>
+
+  }
+
+  /**
+   * Create the folder and files, including the header
+   *
+   * @return true if success
+   */
+  public boolean creatFolderAndFile() {
+<span class="fc" id="L159">    File file = new File(&quot;Transaction&quot;);</span>
+<span class="pc bpc" id="L160" title="3 of 4 branches missed.">    if (!file.exists()&amp;&amp;!file.mkdir()) {</span>
+<span class="nc" id="L161">        return false;</span>
+    }
+<span class="fc" id="L163">    File transactionFile = new File(file.getPath() + &quot;/&quot; + outputFileName + &quot;.csv&quot;);</span>
+    try {
+<span class="fc" id="L165">      outPutStream = new PrintWriter(new OutputStreamWriter(new FileOutputStream(transactionFile), Charset.defaultCharset()));</span>
+      //give the title
+<span class="fc" id="L167">      outPutStream.println(&quot;Transaction number,Date,Time,Client ID,Message,Digital signature,Verified,Transactions status&quot;);</span>
+<span class="nc" id="L168">    } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L169">      return false;</span>
+<span class="fc" id="L170">    }</span>
+<span class="fc" id="L171">    return true;</span>
+  }
+
+  /**
+   * Print the message in a specific format
+   *
+   * @param isEncrypt success for encryption or not
+   * @param isMatch   success for matching up
+   * @param client    client object
+   * @param count     used to form the transaction number
+   */
+  public void outputResult(boolean isEncrypt, boolean isMatch, Client client, int count) {
+<span class="fc bfc" id="L183" title="All 2 branches covered.">    String verified = isEncrypt ? &quot;yes&quot; : &quot;no&quot;;</span>
+    String status;
+
+    //encryption success,check for decryption
+<span class="fc bfc" id="L187" title="All 2 branches covered.">    if (verified.equals(&quot;yes&quot;)) {</span>
+      //decryption matches message
+<span class="pc bpc" id="L189" title="1 of 2 branches missed.">      if (isMatch) {</span>
+<span class="fc bfc" id="L190" title="All 2 branches covered.">        if (client.getWithdraw() != 0) {</span>
+<span class="fc" id="L191">          status = &quot;withdrawal accepted&quot;;</span>
+        } else {
+<span class="fc" id="L193">          status = &quot;deposit accepted&quot;;</span>
+        }
+      } else {
+        //fail to mach the result
+<span class="nc bnc" id="L197" title="All 2 branches missed.">        if (client.getWithdraw() != 0) {</span>
+<span class="nc" id="L198">          status = &quot;withdrawal rejected&quot;;</span>
+<span class="nc" id="L199">          rejectedWithdraw += client.getClientId() + &quot; &quot;;</span>
+        } else {
+<span class="nc" id="L201">          status = &quot;deposit rejected&quot;;</span>
+<span class="nc" id="L202">          rejectedDeposit += client.getClientId() + &quot; &quot;;</span>
+        }
+      }
+    } else {
+      //encryption fail, does not need to check for decryption
+<span class="fc bfc" id="L207" title="All 2 branches covered.">      if (client.getWithdraw() != 0) {</span>
+<span class="fc" id="L208">        status = &quot;withdrawal rejected&quot;;</span>
+<span class="fc" id="L209">        rejectedWithdraw += client.getClientId() + &quot; &quot;;</span>
+      } else {
+<span class="fc" id="L211">        status = &quot;deposit rejected&quot;;</span>
+<span class="fc" id="L212">        rejectedDeposit += client.getClientId() + &quot; &quot;;</span>
+      }
+    }
+<span class="fc" id="L215">    outPutStream.println(&quot;1001-&quot; + count + &quot;,&quot; + client.getDate() + &quot;,&quot; + client.getTime() + &quot;,&quot; + client.getClientId() + &quot;,&quot; + client.getMessage()</span>
+<span class="fc" id="L216">            + &quot;,&quot; + client.getDigitalSignature() + &quot;,&quot; + verified + &quot;,&quot; + status);</span>
+<span class="fc" id="L217">  }</span>
+
+  public int findSamePublicKey() {
+<span class="fc" id="L220">    int count = 0;</span>
+<span class="fc bfc" id="L221" title="All 2 branches covered.">    for (int i = 0; i &lt; clients.size(); i++) {</span>
+<span class="fc" id="L222">      BigInteger key = clients.get(i).getPublicKey();</span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">      for (int j = i + 1; j &lt; clients.size(); j++) {</span>
+<span class="fc bfc" id="L224" title="All 2 branches covered.">        if (clients.get(j).getClientId() == clients.get(i).getClientId()) {</span>
+<span class="fc" id="L225">          continue;</span>
+        }
+<span class="fc" id="L227">        BigInteger otherKey = clients.get(j).getPublicKey();</span>
+<span class="pc bpc" id="L228" title="1 of 2 branches missed.">        if (key.equals(otherKey)) {</span>
+<span class="nc" id="L229">          count++;</span>
+        }
+      }
+    }
+<span class="fc" id="L233">    return count;</span>
+  }
+
+  /**
+   * Print the required output in the console
+   */
+  public void printTransactionInfo() {
+<span class="fc" id="L240">    HashMap&lt;Integer, Integer&gt; map = new HashMap&lt;Integer, Integer&gt;();</span>
+<span class="fc" id="L241">    ValueComparator bvc = new ValueComparator(map);</span>
+<span class="fc" id="L242">    TreeMap&lt;Integer, Integer&gt; sortedMap = new TreeMap&lt;Integer, Integer&gt;(bvc);</span>
+
+<span class="fc bfc" id="L244" title="All 2 branches covered.">    for (int i = 0; i &lt; clients.size(); i++) {</span>
+<span class="fc" id="L245">      Client client = clients.get(i);</span>
+      int money;
+<span class="fc bfc" id="L247" title="All 2 branches covered.">      if (client.getWithdraw() == 0) {</span>
+<span class="fc" id="L248">        money = client.getDeposit();</span>
+      } else {
+<span class="fc" id="L250">        money = client.getWithdraw();</span>
+      }
+<span class="fc bfc" id="L252" title="All 2 branches covered.">      if (map.containsKey(client.getClientId())) {</span>
+<span class="pc bpc" id="L253" title="1 of 2 branches missed.">        if (map.get(client.getClientId()) &lt; money) {</span>
+<span class="nc" id="L254">          map.put(client.getClientId(), money);</span>
+        }
+      } else {
+<span class="fc" id="L257">        map.put(client.getClientId(), money);</span>
+      }
+    }
+<span class="fc" id="L260">    sortedMap.putAll(map);</span>
+<span class="fc" id="L261">    int size = sortedMap.size();</span>
+<span class="pc bpc" id="L262" title="1 of 2 branches missed.">    for (int j = 1; j &lt; size; j++) {</span>
+<span class="fc bfc" id="L263" title="All 2 branches covered.">      if (j == 11) {</span>
+<span class="fc" id="L264">        break;</span>
+      }
+
+<span class="fc" id="L267">      System.out.println(j + &quot;. Client &quot; + j + &quot;: &quot; + sortedMap.pollFirstEntry().getValue() + &quot;\n&quot;);</span>
+    }
+<span class="fc" id="L269">  }</span>
+
+  public class ValueComparator implements Comparator&lt;Integer&gt; {
+    Map&lt;Integer, Integer&gt; base;
+
+<span class="fc" id="L274">    public ValueComparator(Map&lt;Integer, Integer&gt; base) {</span>
+<span class="fc" id="L275">      this.base = base;</span>
+<span class="fc" id="L276">    }</span>
+
+    // Note: this comparator imposes orderings that are inconsistent with
+    // equals.
+    public int compare(Integer number1, Integer number2) {
+<span class="fc bfc" id="L281" title="All 2 branches covered.">      if (base.get(number1) &gt;= base.get(number2)) {</span>
+<span class="fc" id="L282">        return -1;</span>
+      } else {
+<span class="fc" id="L284">        return 1;</span>
+      } // returning 0 would merge keys
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -1,0 +1,5 @@
+For this assignment, I throw the exceptions for handling the error.
+
+I used list to store the client,hash map for retrieve the largest 10 transactions
+
+This collection works well and fast, takes linear time. The drawbacks may use more spaces
